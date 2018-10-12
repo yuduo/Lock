@@ -13,6 +13,14 @@
 		B669987F216B009800C4C0AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B669987D216B009800C4C0AF /* Main.storyboard */; };
 		B6699881216B00A500C4C0AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6699880216B00A500C4C0AF /* Assets.xcassets */; };
 		B6699884216B00A500C4C0AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6699882216B00A500C4C0AF /* LaunchScreen.storyboard */; };
+		B69EC38B21706BA800692188 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC38A21706BA800692188 /* MapViewController.swift */; };
+		B69EC38E21707C5A00692188 /* LogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC38C21707C5A00692188 /* LogTableViewCell.swift */; };
+		B69EC38F21707C5A00692188 /* LogTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B69EC38D21707C5A00692188 /* LogTableViewCell.xib */; };
+		B69EC39121707C9700692188 /* LogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC39021707C9700692188 /* LogTableViewController.swift */; };
+		B69EC39321707CB800692188 /* LogQueryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC39221707CB800692188 /* LogQueryViewController.swift */; };
+		B69EC39621708BC600692188 /* db.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = B69EC39521708BC600692188 /* db.sqlite */; };
+		B69EC39821708BFC00692188 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC39721708BFC00692188 /* Utility.swift */; };
+		B69EC39A2170A06000692188 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3992170A06000692188 /* Operation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +34,15 @@
 		B6699880216B00A500C4C0AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B6699883216B00A500C4C0AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B6699885216B00A500C4C0AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B69EC389217069F900692188 /* BMKSwift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BMKSwift-Bridging-Header.h"; sourceTree = "<group>"; };
+		B69EC38A21706BA800692188 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		B69EC38C21707C5A00692188 /* LogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTableViewCell.swift; sourceTree = "<group>"; };
+		B69EC38D21707C5A00692188 /* LogTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogTableViewCell.xib; sourceTree = "<group>"; };
+		B69EC39021707C9700692188 /* LogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTableViewController.swift; sourceTree = "<group>"; };
+		B69EC39221707CB800692188 /* LogQueryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogQueryViewController.swift; sourceTree = "<group>"; };
+		B69EC39521708BC600692188 /* db.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = db.sqlite; sourceTree = "<group>"; };
+		B69EC39721708BFC00692188 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		B69EC3992170A06000692188 /* Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,14 +95,31 @@
 		B6699878216B009800C4C0AF /* Lock */ = {
 			isa = PBXGroup;
 			children = (
+				B69EC39421708AF800692188 /* Model */,
 				B6699879216B009800C4C0AF /* AppDelegate.swift */,
 				B669987B216B009800C4C0AF /* ViewController.swift */,
 				B669987D216B009800C4C0AF /* Main.storyboard */,
 				B6699880216B00A500C4C0AF /* Assets.xcassets */,
 				B6699882216B00A500C4C0AF /* LaunchScreen.storyboard */,
 				B6699885216B00A500C4C0AF /* Info.plist */,
+				B69EC389217069F900692188 /* BMKSwift-Bridging-Header.h */,
+				B69EC38A21706BA800692188 /* MapViewController.swift */,
+				B69EC38C21707C5A00692188 /* LogTableViewCell.swift */,
+				B69EC38D21707C5A00692188 /* LogTableViewCell.xib */,
+				B69EC39021707C9700692188 /* LogTableViewController.swift */,
+				B69EC39221707CB800692188 /* LogQueryViewController.swift */,
+				B69EC39721708BFC00692188 /* Utility.swift */,
 			);
 			path = Lock;
+			sourceTree = "<group>";
+		};
+		B69EC39421708AF800692188 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B69EC39521708BC600692188 /* db.sqlite */,
+				B69EC3992170A06000692188 /* Operation.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,8 +183,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B69EC39621708BC600692188 /* db.sqlite in Resources */,
 				B6699884216B00A500C4C0AF /* LaunchScreen.storyboard in Resources */,
 				B6699881216B00A500C4C0AF /* Assets.xcassets in Resources */,
+				B69EC38F21707C5A00692188 /* LogTableViewCell.xib in Resources */,
 				B669987F216B009800C4C0AF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -163,15 +199,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-Lock-checkManifestLockResult.txt",
 			);
@@ -185,21 +217,21 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Lock/Pods-Lock-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftSocket/SwiftSocket.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSocket.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -211,15 +243,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Lock/Pods-Lock-resources.sh",
 				"${PODS_ROOT}/BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/mapapi.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mapapi.bundle",
 			);
@@ -235,7 +263,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B69EC39821708BFC00692188 /* Utility.swift in Sources */,
 				B669987C216B009800C4C0AF /* ViewController.swift in Sources */,
+				B69EC38B21706BA800692188 /* MapViewController.swift in Sources */,
+				B69EC39A2170A06000692188 /* Operation.swift in Sources */,
+				B69EC39321707CB800692188 /* LogQueryViewController.swift in Sources */,
+				B69EC39121707C9700692188 /* LogTableViewController.swift in Sources */,
+				B69EC38E21707C5A00692188 /* LogTableViewCell.swift in Sources */,
 				B669987A216B009800C4C0AF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,6 +423,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.htgd.Lock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Lock/BMKSwift-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -407,6 +442,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.htgd.Lock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Lock/BMKSwift-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
