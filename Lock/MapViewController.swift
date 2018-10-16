@@ -8,14 +8,28 @@
 
 import UIKit
 
-class MapViewController: UIViewController ,BMKMapViewDelegate{
+class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerDelegate{
     var _mapView: BMKMapView?
+    let locationManager = CLLocationManager()
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         _mapView = BMKMapView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         self.view.addSubview(_mapView!)
+        
+        
+        // Ask for Authorisation from the User.
+        self.locationManager.requestAlwaysAuthorization()
+        
+        // For use in foreground
+        self.locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,5 +57,14 @@ class MapViewController: UIViewController ,BMKMapViewDelegate{
         super.viewWillDisappear(animated)
         _mapView?.viewWillDisappear()
         _mapView?.delegate = nil // 不用时，置nil
+    }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        
+    }
+    
+    func queryLock(){
+        
     }
 }

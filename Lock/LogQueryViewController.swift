@@ -46,6 +46,9 @@ class LogQueryViewController: UIViewController {
         
         
         for ope in (try! db?.prepare(ops))! {
+            if ope[Operation_Record].isEmpty{
+                continue
+            }
             print("id: \(ope[Operation_Record]), name: \(ope[User_Account]), email: \(ope[Date_Time])")
             
             var op:Operation!

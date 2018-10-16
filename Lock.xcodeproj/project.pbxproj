@@ -21,6 +21,8 @@
 		B69EC39621708BC600692188 /* db.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = B69EC39521708BC600692188 /* db.sqlite */; };
 		B69EC39821708BFC00692188 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC39721708BFC00692188 /* Utility.swift */; };
 		B69EC39A2170A06000692188 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3992170A06000692188 /* Operation.swift */; };
+		B69EC39F217495A000692188 /* QueryLockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC39E217495A000692188 /* QueryLockViewController.swift */; };
+		B69EC3A121758F4A00692188 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3A021758F4A00692188 /* Lock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +45,8 @@
 		B69EC39521708BC600692188 /* db.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = db.sqlite; sourceTree = "<group>"; };
 		B69EC39721708BFC00692188 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		B69EC3992170A06000692188 /* Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
+		B69EC39E217495A000692188 /* QueryLockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryLockViewController.swift; sourceTree = "<group>"; };
+		B69EC3A021758F4A00692188 /* Lock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,7 @@
 				B69EC39021707C9700692188 /* LogTableViewController.swift */,
 				B69EC39221707CB800692188 /* LogQueryViewController.swift */,
 				B69EC39721708BFC00692188 /* Utility.swift */,
+				B69EC39E217495A000692188 /* QueryLockViewController.swift */,
 			);
 			path = Lock;
 			sourceTree = "<group>";
@@ -118,6 +123,7 @@
 			children = (
 				B69EC39521708BC600692188 /* db.sqlite */,
 				B69EC3992170A06000692188 /* Operation.swift */,
+				B69EC3A021758F4A00692188 /* Lock.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -223,6 +229,7 @@
 				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftMessages/SwiftMessages.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSocket/SwiftSocket.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -231,6 +238,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftMessages.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSocket.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,6 +276,8 @@
 				B69EC38B21706BA800692188 /* MapViewController.swift in Sources */,
 				B69EC39A2170A06000692188 /* Operation.swift in Sources */,
 				B69EC39321707CB800692188 /* LogQueryViewController.swift in Sources */,
+				B69EC39F217495A000692188 /* QueryLockViewController.swift in Sources */,
+				B69EC3A121758F4A00692188 /* Lock.swift in Sources */,
 				B69EC39121707C9700692188 /* LogTableViewController.swift in Sources */,
 				B69EC38E21707C5A00692188 /* LogTableViewCell.swift in Sources */,
 				B669987A216B009800C4C0AF /* AppDelegate.swift in Sources */,

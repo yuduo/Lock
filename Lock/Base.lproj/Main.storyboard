@@ -52,7 +52,6 @@
                                 <state key="normal" title="登录"/>
                                 <connections>
                                     <action selector="loginButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iiX-NK-wWp"/>
-                                    <segue destination="Hyx-SO-XQy" kind="show" id="vEg-FZ-49h"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -62,6 +61,7 @@
                     <connections>
                         <outlet property="password" destination="7xe-4m-Jzn" id="Cjb-hs-pQx"/>
                         <outlet property="userName" destination="oKB-Me-J7u" id="pSS-vh-NAd"/>
+                        <segue destination="Hyx-SO-XQy" kind="show" identifier="loginSegue" id="74g-vJ-433"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -239,6 +239,9 @@
                                 <rect key="frame" x="21" y="136" width="122" height="90"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="锁具查询"/>
+                                <connections>
+                                    <segue destination="5cB-HB-I0k" kind="show" id="Ain-0F-aaC"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hCt-r7-i6r">
                                 <rect key="frame" x="184" y="304" width="122" height="90"/>
@@ -286,6 +289,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vYT-Hi-lNK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3500" y="196"/>
+        </scene>
+        <!--Query Lock View Controller-->
+        <scene sceneID="9Ss-Jv-Omi">
+            <objects>
+                <viewController id="5cB-HB-I0k" customClass="QueryLockViewController" customModule="Lock" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nto-Wd-ZYX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RWx-AI-WQd">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="gKR-k1-9lc"/>
+                    </view>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="3D9-vf-yG2" id="cVx-HL-rge"/>
+                        <outlet property="tableview" destination="RWx-AI-WQd" id="oKu-8I-agV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I78-tD-dHD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="3D9-vf-yG2">
+                    <connections>
+                        <outlet property="delegate" destination="5cB-HB-I0k" id="aGB-Fu-H02"/>
+                        <outlet property="searchContentsController" destination="5cB-HB-I0k" id="6sq-wj-lUW"/>
+                        <outlet property="searchResultsDataSource" destination="5cB-HB-I0k" id="kLv-OR-7s1"/>
+                        <outlet property="searchResultsDelegate" destination="5cB-HB-I0k" id="bd1-qV-JVd"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="3500" y="940.47976011994012"/>
         </scene>
     </scenes>
 </document>

@@ -44,7 +44,7 @@ internal var logArray:[Operation] = []
             as? LogTableViewCell else {
                 return UITableViewCell()
         }
-
+        cell.load(operation: logArray[indexPath.row])
         return cell
     }
     
