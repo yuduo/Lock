@@ -23,6 +23,8 @@
 		B69EC39A2170A06000692188 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3992170A06000692188 /* Operation.swift */; };
 		B69EC39F217495A000692188 /* QueryLockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC39E217495A000692188 /* QueryLockViewController.swift */; };
 		B69EC3A121758F4A00692188 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3A021758F4A00692188 /* Lock.swift */; };
+		B69EC3A32175E8C900692188 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B69EC3A22175E8C800692188 /* InfoPlist.strings */; };
+		B69EC3A52176DE4C00692188 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3A42176DE4B00692188 /* Location.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,8 @@
 		B69EC3992170A06000692188 /* Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
 		B69EC39E217495A000692188 /* QueryLockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryLockViewController.swift; sourceTree = "<group>"; };
 		B69EC3A021758F4A00692188 /* Lock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
+		B69EC3A22175E8C800692188 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
+		B69EC3A42176DE4B00692188 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +118,7 @@
 				B69EC39221707CB800692188 /* LogQueryViewController.swift */,
 				B69EC39721708BFC00692188 /* Utility.swift */,
 				B69EC39E217495A000692188 /* QueryLockViewController.swift */,
+				B69EC3A22175E8C800692188 /* InfoPlist.strings */,
 			);
 			path = Lock;
 			sourceTree = "<group>";
@@ -124,6 +129,7 @@
 				B69EC39521708BC600692188 /* db.sqlite */,
 				B69EC3992170A06000692188 /* Operation.swift */,
 				B69EC3A021758F4A00692188 /* Lock.swift */,
+				B69EC3A42176DE4B00692188 /* Location.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -190,6 +196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B69EC39621708BC600692188 /* db.sqlite in Resources */,
+				B69EC3A32175E8C900692188 /* InfoPlist.strings in Resources */,
 				B6699884216B00A500C4C0AF /* LaunchScreen.storyboard in Resources */,
 				B6699881216B00A500C4C0AF /* Assets.xcassets in Resources */,
 				B69EC38F21707C5A00692188 /* LogTableViewCell.xib in Resources */,
@@ -272,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B69EC39821708BFC00692188 /* Utility.swift in Sources */,
+				B69EC3A52176DE4C00692188 /* Location.swift in Sources */,
 				B669987C216B009800C4C0AF /* ViewController.swift in Sources */,
 				B69EC38B21706BA800692188 /* MapViewController.swift in Sources */,
 				B69EC39A2170A06000692188 /* Operation.swift in Sources */,

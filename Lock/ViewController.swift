@@ -13,6 +13,7 @@ import SwiftMessages
 
 let client = TCPClient(address:
     "47.99.47.199",
+
                        //"192.168.1.52",
     port: 5002)
 
@@ -32,6 +33,7 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     @IBAction func loginButtonClicked(_ sender: Any) {
+        //performSegue(withIdentifier: "loginSegue", sender: nil)
         var u=userName.text!
         var p=password.text!
 //        u="wtlz0001"
@@ -85,7 +87,6 @@ class ViewController: UIViewController {
                         let error = MessageView.viewFromNib(layout: .tabView)
                         error.configureTheme(.error)
                         error.configureContent(title: "Error", body: "Something is horribly wrong!")
-                        error.button?.setTitle("Stop", for: .normal)
                         
                         SwiftMessages.show(view: error)
                     }else if response[0] == 0x03 ||  response[0] == 0x04{

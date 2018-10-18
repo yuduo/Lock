@@ -101,7 +101,6 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                         let error = MessageView.viewFromNib(layout: .tabView)
                         error.configureTheme(.error)
                         error.configureContent(title: "Error", body: "Something is horribly wrong!")
-                        error.button?.setTitle("Stop", for: .normal)
                         
                         SwiftMessages.show(view: error)
                     }else {
