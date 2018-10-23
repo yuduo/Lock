@@ -8,12 +8,38 @@
 
 import UIKit
 import SQLite
+import DropDown
 class LogQueryViewController: UIViewController {
     var logArray:[Operation] = []
+        @IBOutlet weak var segment: UISegmentedControl!
+    @IBOutlet weak var chooseView: UIView!
+    
+    @IBOutlet weak var queryButton: UIButton!
+    @IBOutlet weak var dropButton: UIButton!
+    let dropDown = DropDown()
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        dropButton.isHidden=true;
+        // Do any additional setup after loading the view.
+        // The view to which the drop down will appear on
+        dropDown.anchorView = dropButton // UIView or UIBarButtonItem
+        dropDown.bottomOffset = CGPoint(x: 0, y: dropButton.bounds.height)
+        
+        // The list of items to display. Can be changed dynamically
+        dropDown.dataSource = ["Car", "Motorcycle", "Truck"]
+        // Action triggered on selection
+        dropDown.selectionAction = { [weak self] (index, item) in
+            self?.dropButton.setTitle(item, for: .normal)
+        }
+        chooseView.isHidden=false
+        dropDown.hide()
+        
+        dropButton.layer.borderWidth=1
+        dropButton.layer.borderColor = UIColor.blue.cgColor
+        dropButton.layer.cornerRadius = 5
+        queryButton.layer.cornerRadius = 5
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,6 +92,25 @@ class LogQueryViewController: UIViewController {
             if let destinationVC = segue.destination as? LogTableViewController {
                 destinationVC.logArray = logArray
             }
+        }
+    }
+    @IBAction func dropButtonClicked(_ sender: Any) {
+        dropDown.show()
+    }
+    
+    
+    @IBAction func didSelect(_ sender: Any) {
+        if(segment.selectedSegmentIndex == 0)
+        {
+            chooseView.isHidden=false
+            dropButton.isHidden=true
+            dropDown.hide()
+        }
+        else if(segment.selectedSegmentIndex == 1)
+        {
+            chooseView.isHidden=true
+            dropButton.isHidden=false
+            
         }
     }
 }

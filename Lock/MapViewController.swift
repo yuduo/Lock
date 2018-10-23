@@ -140,15 +140,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                 
                 let response=Array(rdata[20...rdata.count-3])
                 
-                    let success = MessageView.viewFromNib(layout: .cardView)
-                    success.configureTheme(.success)
-                    success.configureDropShadow()
-                    success.configureContent(title: "Success", body: "Something good happened!")
-                    success.button?.isHidden = true
-                    var successConfig = SwiftMessages.defaultConfig
-                    successConfig.presentationStyle = .center
-                    
-                    SwiftMessages.show(config: successConfig, view: success)
+                    loadSuccess()
                     let loc=Array(response[2...response.count-2])
                     for i in 0...count{
                         var location:Location!=Location()
@@ -174,12 +166,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                 
                 
             }else{
-                let error = MessageView.viewFromNib(layout: .tabView)
-                error.configureTheme(.error)
-                error.configureContent(title: "Error", body: "Something is horribly wrong!")
-                
-                
-                SwiftMessages.show(view: error)
+                loadFaild()
             }
             
         case .failure(let error):
@@ -199,7 +186,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         
     }
     func openLock(lockId:String){
-        let username="pm"
+        let username="pm8"
         var _userName:[UInt8]=Array(username.utf8)
         
         for _ in _userName.count..<16{
@@ -231,22 +218,9 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                 let response=rdata[20]
                 if response == 1{
                     //faild
-                    let error = MessageView.viewFromNib(layout: .tabView)
-                    error.configureTheme(.error)
-                    error.configureContent(title: "Error", body: "Something is horribly wrong!")
-                    
-                    
-                    SwiftMessages.show(view: error)
+                    loadFaild()
                 }else {
-                    let success = MessageView.viewFromNib(layout: .cardView)
-                    success.configureTheme(.success)
-                    success.configureDropShadow()
-                    success.configureContent(title: "Success", body: "Something good happened!")
-                    success.button?.isHidden = true
-                    var successConfig = SwiftMessages.defaultConfig
-                    successConfig.presentationStyle = .center
-                    
-                    SwiftMessages.show(config: successConfig, view: success)
+                    loadSuccess()
                     
                 }
                 
@@ -258,7 +232,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         }
     }
     func openLock(longitude:String,latutude:String,lockId:String){
-        let username="pm"
+        let username="pm8"
         var _userName:[UInt8]=Array(username.utf8)
         
         for _ in _userName.count..<16{
@@ -290,22 +264,9 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                 let response=rdata[20]
                 if response != 0{
                     //faild
-                    let error = MessageView.viewFromNib(layout: .tabView)
-                    error.configureTheme(.error)
-                    error.configureContent(title: "Error", body: "Something is horribly wrong!")
-                    
-                    
-                    SwiftMessages.show(view: error)
+                    loadFaild()
                 }else {
-                    let success = MessageView.viewFromNib(layout: .cardView)
-                    success.configureTheme(.success)
-                    success.configureDropShadow()
-                    success.configureContent(title: "Success", body: "Something good happened!")
-                    success.button?.isHidden = true
-                    var successConfig = SwiftMessages.defaultConfig
-                    successConfig.presentationStyle = .center
-                    
-                    SwiftMessages.show(config: successConfig, view: success)
+                    loadSuccess()
                     
                 }
                 

@@ -25,6 +25,10 @@
 		B69EC3A121758F4A00692188 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3A021758F4A00692188 /* Lock.swift */; };
 		B69EC3A32175E8C900692188 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B69EC3A22175E8C800692188 /* InfoPlist.strings */; };
 		B69EC3A52176DE4C00692188 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3A42176DE4B00692188 /* Location.swift */; };
+		B69EC3A72178709500692188 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3A62178709500692188 /* PasswordViewController.swift */; };
+		B69EC3A921788EB000692188 /* MessageBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3A821788EB000692188 /* MessageBox.swift */; };
+		B69EC3AB21796D1500692188 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3AA21796D1500692188 /* Socket.swift */; };
+		B69EC3AD2179B0C000692188 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3AC2179B0C000692188 /* Log.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +55,10 @@
 		B69EC3A021758F4A00692188 /* Lock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
 		B69EC3A22175E8C800692188 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		B69EC3A42176DE4B00692188 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		B69EC3A62178709500692188 /* PasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewController.swift; sourceTree = "<group>"; };
+		B69EC3A821788EB000692188 /* MessageBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBox.swift; sourceTree = "<group>"; };
+		B69EC3AA21796D1500692188 /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
+		B69EC3AC2179B0C000692188 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,9 +124,13 @@
 				B69EC38D21707C5A00692188 /* LogTableViewCell.xib */,
 				B69EC39021707C9700692188 /* LogTableViewController.swift */,
 				B69EC39221707CB800692188 /* LogQueryViewController.swift */,
+				B69EC3AC2179B0C000692188 /* Log.swift */,
 				B69EC39721708BFC00692188 /* Utility.swift */,
+				B69EC3AA21796D1500692188 /* Socket.swift */,
 				B69EC39E217495A000692188 /* QueryLockViewController.swift */,
 				B69EC3A22175E8C800692188 /* InfoPlist.strings */,
+				B69EC3A62178709500692188 /* PasswordViewController.swift */,
+				B69EC3A821788EB000692188 /* MessageBox.swift */,
 			);
 			path = Lock;
 			sourceTree = "<group>";
@@ -233,6 +245,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Lock/Pods-Lock-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/DropDown/DropDown.framework",
 				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
@@ -242,6 +255,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DropDown.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
@@ -280,10 +294,14 @@
 			files = (
 				B69EC39821708BFC00692188 /* Utility.swift in Sources */,
 				B69EC3A52176DE4C00692188 /* Location.swift in Sources */,
+				B69EC3AD2179B0C000692188 /* Log.swift in Sources */,
 				B669987C216B009800C4C0AF /* ViewController.swift in Sources */,
 				B69EC38B21706BA800692188 /* MapViewController.swift in Sources */,
 				B69EC39A2170A06000692188 /* Operation.swift in Sources */,
+				B69EC3A72178709500692188 /* PasswordViewController.swift in Sources */,
 				B69EC39321707CB800692188 /* LogQueryViewController.swift in Sources */,
+				B69EC3A921788EB000692188 /* MessageBox.swift in Sources */,
+				B69EC3AB21796D1500692188 /* Socket.swift in Sources */,
 				B69EC39F217495A000692188 /* QueryLockViewController.swift in Sources */,
 				B69EC3A121758F4A00692188 /* Lock.swift in Sources */,
 				B69EC39121707C9700692188 /* LogTableViewController.swift in Sources */,

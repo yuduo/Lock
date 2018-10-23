@@ -84,26 +84,16 @@ class ViewController: UIViewController {
                     let response=Array(rdata[20...rdata.count-1])
                     if response[0] == 0x00{
                         //faild
-                        let error = MessageView.viewFromNib(layout: .tabView)
-                        error.configureTheme(.error)
-                        error.configureContent(title: "Error", body: "Something is horribly wrong!")
-                        
-                        SwiftMessages.show(view: error)
+                        loadFaild()
                     }else if response[0] == 0x03 ||  response[0] == 0x04{
-                        let success = MessageView.viewFromNib(layout: .cardView)
-                        success.configureTheme(.success)
-                        success.configureDropShadow()
-                        success.configureContent(title: "Success", body: "Something good happened!")
-                        success.button?.isHidden = true
-                        var successConfig = SwiftMessages.defaultConfig
-                        successConfig.presentationStyle = .center
-                        
-                        SwiftMessages.show(config: successConfig, view: success)
-                        
-                        let time=response[4...11]
-                        let lock=response[12...response.count-3]
+                        loadSuccess()
+                        if response[0] == 0x03{
+                            let time=response[4...11]
+                            let lock=String(data: Data(bytes:response[12...response.count-3]), encoding: String.Encoding.utf8)
+                        }
                         
                         
+                        Socket.uploadLog(content: "登录", target: "pm8")
                         performSegue(withIdentifier: "loginSegue", sender: nil)
                     }else {
                         

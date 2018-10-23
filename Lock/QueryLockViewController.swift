@@ -16,9 +16,13 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
     let searchController = UISearchController(searchResultsController: nil)
     @IBOutlet weak var tableview: UITableView!
     var LockArray:[Lock] = []
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        
         // Do any additional setup after loading the view.
         tableview.delegate=self
         tableview.dataSource=self
@@ -98,21 +102,9 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                     let response=Array(rdata[20...rdata.count-3])
                     if response[0] == 0x00{
                         //faild
-                        let error = MessageView.viewFromNib(layout: .tabView)
-                        error.configureTheme(.error)
-                        error.configureContent(title: "Error", body: "Something is horribly wrong!")
-                        
-                        SwiftMessages.show(view: error)
+                        loadFaild()
                     }else {
-                        let success = MessageView.viewFromNib(layout: .cardView)
-                        success.configureTheme(.success)
-                        success.configureDropShadow()
-                        success.configureContent(title: "Success", body: "Something good happened!")
-                        success.button?.isHidden = true
-                        var successConfig = SwiftMessages.defaultConfig
-                        successConfig.presentationStyle = .center
-                        
-                        SwiftMessages.show(config: successConfig, view: success)
+                        loadSuccess()
                         print(response.count)
                         let size=response[0]
                         let locks=Array(response[1...response.count-1])
@@ -143,4 +135,6 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
 //            print(error)
 //        }
     }
+    
+    
 }
