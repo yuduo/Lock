@@ -14,9 +14,13 @@ import SwiftMessages
 class PasswordViewController: UIViewController {
     
 
+    @IBOutlet weak var CancelButton: UIButton!
+    @IBOutlet weak var OKButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        OKButton.layer.cornerRadius=5
+        CancelButton.layer.cornerRadius=5
         
     }
 
