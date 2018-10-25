@@ -19,6 +19,7 @@ let client = TCPClient(address:
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var userName: UITextField!
     @IBOutlet weak var password: UITextField!
     override func viewDidLoad() {
@@ -26,6 +27,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         userName.text="pm8"
         password.text="m"
+        loginButton.layer.cornerRadius=5
     }
 
     override func didReceiveMemoryWarning() {

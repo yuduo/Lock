@@ -10,9 +10,12 @@ import UIKit
 import CryptoSwift
 import SwiftSocket
 import SwiftMessages
+import DLRadioButton
 class QueryLockViewController: UIViewController,UITableViewDelegate, UITableViewDataSource,UISearchResultsUpdating {
     
+    @IBOutlet weak var nameButton: DLRadioButton!
     
+    @IBOutlet weak var codeButton: DLRadioButton!
     let searchController = UISearchController(searchResultsController: nil)
     @IBOutlet weak var tableview: UITableView!
     var LockArray:[Lock] = []
@@ -33,6 +36,8 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
         self.tableview.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         queryAll()
+        nameButton.isSelected=true
+        codeButton.isSelected=false
     }
 
     override func didReceiveMemoryWarning() {

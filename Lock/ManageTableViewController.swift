@@ -19,14 +19,14 @@ class ManageTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        
+        self.tableView.register(UINib(nibName: "ManageTableViewCell", bundle: nil), forCellReuseIdentifier: "ManageTableViewCell")
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -35,15 +35,29 @@ class ManageTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "ManageTableViewCell")
-            as? ManageTableViewCell else {
-                return UITableViewCell()
-        }
-        cell.title.text=cellArray[indexPath.row]
-        return cell
+        var cell = tableView.dequeueReusableCell(withIdentifier: "ManageTableViewCell") as? ManageTableViewCell
+        
+        
+        cell?.title.text=cellArray[indexPath.row]
+        return cell!
     }
-
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Row \(indexPath.row) selected")
+        switch indexPath.row {
+        case 0:
+            performSegue(withIdentifier: "log", sender: nil)
+        case 1:
+            performSegue(withIdentifier: "server", sender: nil)
+        case 2:
+            performSegue(withIdentifier: "clear", sender: nil)
+        case 3:
+            performSegue(withIdentifier: "password", sender: nil)
+        case 4:
+            performSegue(withIdentifier: "help", sender: nil)
+        default:
+            performSegue(withIdentifier: "version", sender: nil)
+        }
+    }
     /*
     // MARK: - Navigation
 

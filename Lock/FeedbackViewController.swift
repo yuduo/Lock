@@ -10,6 +10,7 @@ import UIKit
 
 class FeedbackViewController: UIViewController {
 
+    @IBOutlet weak var content: UITextView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,4 +28,6 @@ class FeedbackViewController: UIViewController {
     }
     */
 
+    @IBAction func OKClicked(_ sender: Any) {
+    }
 }

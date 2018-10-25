@@ -8,15 +8,19 @@
 
 import UIKit
 
-class HelpViewController: UIViewController {
+class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewDataSource{
 
     @IBOutlet weak var tableview: UITableView!
     @IBOutlet weak var quitButton: UIButton!
+    let rowArray=["使用与帮助","反馈信息","版本更新"]
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         quitButton.layer.cornerRadius=5
+        self.tableview.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableview.delegate=self
+        self.tableview.dataSource=self
     }
     
 
@@ -32,5 +36,38 @@ class HelpViewController: UIViewController {
 
     @IBAction func quitButtonClicked(_ sender: Any) {
         
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell     {
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "cell")
+        
+        cell.textLabel?.text = rowArray[indexPath.row]
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Row \(indexPath.row) selected")
+        switch indexPath.row {
+        case 0:
+            performSegue(withIdentifier: "feedback", sender: nil)
+        case 1:
+            performSegue(withIdentifier: "about", sender: nil)
+        case 2:
+            //
+            let url=URL(string: "")
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url!)
+            }
+        
+        default:
+            performSegue(withIdentifier: "feedback", sender: nil)
+        }
     }
 }
