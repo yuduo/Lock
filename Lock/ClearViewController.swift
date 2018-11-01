@@ -7,17 +7,35 @@
 //
 
 import UIKit
-
+import DropDown
 class ClearViewController: UIViewController {
-
+    @IBOutlet weak var ticket: UILabel!
+    @IBOutlet weak var log: UILabel!
+    
+    @IBOutlet weak var drop: UIButton!
     @IBOutlet weak var CancelButton: UIButton!
     @IBOutlet weak var OKButton: UIButton!
+    let dropDown = DropDown()
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title="数据清理"
         // Do any additional setup after loading the view.
         OKButton.layer.cornerRadius=5
         CancelButton.layer.cornerRadius=5
+        drop.layer.borderWidth=1
+        drop.layer.borderColor = UIColor.blue.cgColor
+        drop.layer.cornerRadius = 5
+        
+        dropDown.anchorView = drop // UIView or UIBarButtonItem
+        dropDown.bottomOffset = CGPoint(x: 0, y: drop.bounds.height)
+        // The list of items to display. Can be changed dynamically
+        dropDown.dataSource = ["一个月","三个月","全部"]
+        // Action triggered on selection
+        dropDown.selectionAction = { [weak self] (index, item) in
+            self?.drop.setTitle(item, for: .normal)
+        }
+        
+        log.text=String(Log.opCount())
     }
     
 
@@ -30,5 +48,10 @@ class ClearViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    @IBAction func OK(_ sender: Any) {
+        Log.clear("1")
+    }
+    
+    @IBAction func Cancel(_ sender: Any) {
+    }
 }

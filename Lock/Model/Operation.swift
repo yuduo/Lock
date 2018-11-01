@@ -8,9 +8,9 @@
 
 import UIKit
 
-struct Operation: Codable {
-    var User_Account:String
-    var Date_Time:String
-    var Operation_Record:String
+struct Operation {
+    var User_Account=String()
+    var Date_Time=String()
+    var Operation_Record=String()
     
 }

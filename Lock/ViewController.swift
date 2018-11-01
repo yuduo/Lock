@@ -19,6 +19,7 @@ let client = TCPClient(address:
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var eyeButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var userName: UITextField!
     @IBOutlet weak var password: UITextField!
@@ -28,8 +29,23 @@ class ViewController: UIViewController {
         userName.text="pm8"
         password.text="m"
         loginButton.layer.cornerRadius=5
+        eyeButton.setBackgroundImage(UIImage(named: "闭眼"), for: UIControl.State.normal)
+        eyeButton.tag=1
+        password.isSecureTextEntry = true
     }
 
+    @IBAction func eyeClicked(_ sender: Any) {
+        
+        if eyeButton.tag == 1{
+            eyeButton.tag = 2
+            eyeButton.setBackgroundImage(UIImage(named: "眼睛"), for: UIControl.State.normal)
+            password.isSecureTextEntry = false
+        }else{
+            eyeButton.tag = 1
+            eyeButton.setBackgroundImage(UIImage(named: "闭眼"), for: UIControl.State.normal)
+            password.isSecureTextEntry = true
+        }
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -94,7 +110,7 @@ class ViewController: UIViewController {
                             let lock=String(data: Data(bytes:response[12...response.count-3]), encoding: String.Encoding.utf8)
                         }
                         
-                        
+                        Log.login(u, "正常登录")
                         Socket.uploadLog(content: "登录", target: "pm8")
                         performSegue(withIdentifier: "loginSegue", sender: nil)
                     }else {

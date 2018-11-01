@@ -35,7 +35,8 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         }
         
         queryLock(latitude: "120.665441",longitude: "31.2043183");
-        
+        let location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(120.665441), Double(31.2043183));
+        _mapView?.setCenter(location, animated: true)
         
         //显示定位图层
         _mapView?.showsUserLocation = true

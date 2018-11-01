@@ -18,6 +18,7 @@ internal var logArray:[Operation] = []
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.title="日志查询"
     }
 
     override func didReceiveMemoryWarning() {

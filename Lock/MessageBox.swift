@@ -16,7 +16,7 @@ extension UIViewController {
         success.configureContent(title: "Success", body: "Something good happened!")
         success.button?.isHidden = true
         var successConfig = SwiftMessages.defaultConfig
-        successConfig.presentationStyle = .center
+        successConfig.presentationStyle = .top
         
         SwiftMessages.show(config: successConfig, view: success)
     }

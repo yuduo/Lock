@@ -15,7 +15,7 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
     let rowArray=["使用与帮助","反馈信息","版本更新"]
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title="使用帮助"
         // Do any additional setup after loading the view.
         quitButton.layer.cornerRadius=5
         self.tableview.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -35,7 +35,7 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
     */
 
     @IBAction func quitButtonClicked(_ sender: Any) {
-        
+        self.dismiss(animated: true, completion: nil);
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -46,7 +46,7 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
         let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "cell")
         
         cell.textLabel?.text = rowArray[indexPath.row]
-        
+        cell.accessoryType = .disclosureIndicator;
         return cell
     }
     
@@ -54,9 +54,9 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
         print("Row \(indexPath.row) selected")
         switch indexPath.row {
         case 0:
-            performSegue(withIdentifier: "feedback", sender: nil)
-        case 1:
             performSegue(withIdentifier: "about", sender: nil)
+        case 1:
+            performSegue(withIdentifier: "feedback", sender: nil)
         case 2:
             //
             let url=URL(string: "")

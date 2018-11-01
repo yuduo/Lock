@@ -11,13 +11,14 @@ import CryptoSwift
 import SwiftSocket
 import SwiftMessages
 import DLRadioButton
-class QueryLockViewController: UIViewController,UITableViewDelegate, UITableViewDataSource,UISearchResultsUpdating {
-    
+class QueryLockViewController: UIViewController,UITableViewDelegate, UITableViewDataSource,UISearchResultsUpdating ,UISearchBarDelegate{
+    var location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(120.665441), Double(31.2043183));
     @IBOutlet weak var nameButton: DLRadioButton!
     
     @IBOutlet weak var codeButton: DLRadioButton!
     let searchController = UISearchController(searchResultsController: nil)
     @IBOutlet weak var tableview: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     var LockArray:[Lock] = []
     
     
@@ -25,21 +26,28 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
         super.viewDidLoad()
 
         
-        
+        self.title="锁具查询"
         // Do any additional setup after loading the view.
         tableview.delegate=self
         tableview.dataSource=self
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         
-        tableview.tableHeaderView = searchController.searchBar
+        //tableview.tableHeaderView = searchController.searchBar
         self.tableview.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        queryAll()
+        queryAll(str: "")
         nameButton.isSelected=true
         codeButton.isSelected=false
+        
+        searchBar.delegate=self
     }
 
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        print(searchText)
+        queryAll(str: searchText)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -72,15 +80,32 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
         return cell
        
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if LockArray.count > indexPath.row{
+            let lock:Lock=LockArray[indexPath.row]
+            location.latitude=Double(lock.latutude)!
+            location.longitude=Double(lock.longitude)!
+            performSegue(withIdentifier: "location", sender: nil)
+        }
+    }
     func updateSearchResults(for searchController: UISearchController) {
         self.tableview.reloadData()
     }
-    func queryAll(){
+    func queryAll(str:String){
         var message:[UInt8]=[]
+        if (str.count > 0){
+            message = Array(str.utf8)
+        }
+        
         for _ in 1...50{
             message.append(0x00)
         }
-        let type:[UInt8]=[0x00]//lock name
+        var type:[UInt8]=[]
+        if nameButton.isSelected{
+            type=[0x00]
+        }else{
+            type=[0xff]
+        }
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0f,0x62,0xff]+type+message
         
         var crc=m.crc16()
@@ -141,5 +166,12 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
 //        }
     }
     
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "location"
+        {
+            if let destinationVC = segue.destination as? LocationViewController {
+                destinationVC.location = location
+            }
+        }
+    }
 }

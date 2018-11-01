@@ -1,22 +1,20 @@
 //
-//  FeedbackViewController.swift
+//  ControlViewController.swift
 //  Lock
 //
-//  Created by yong hu on 2018/10/23.
+//  Created by yong hu on 2018/10/31.
 //  Copyright © 2018 yong hu. All rights reserved.
 //
 
 import UIKit
-import KMPlaceholderTextView
-class FeedbackViewController: UIViewController {
 
-    @IBOutlet weak var content: KMPlaceholderTextView!
+class ControlViewController: UIViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        content.placeholder="请简单描述一下，您在使用本软件过程中遇到的问题，方便我们后期的修正与改进，谢谢~"
-        self.title="使用帮助"
+        self.title="门禁控制"
     }
     
 
@@ -30,6 +28,15 @@ class FeedbackViewController: UIViewController {
     }
     */
 
-    @IBAction func OKClicked(_ sender: Any) {
+    @IBAction func directClicked(_ sender: Any) {
+        
+    }
+    
+    @IBAction func helpClicked(_ sender: Any) {
+        
+    }
+    
+    @IBAction func remoteClicked(_ sender: Any) {
+        
     }
 }

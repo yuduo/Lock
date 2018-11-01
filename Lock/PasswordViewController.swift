@@ -13,7 +13,11 @@ import SwiftMessages
 
 class PasswordViewController: UIViewController {
     
-
+    @IBOutlet weak var origin: UITextField!
+    
+    @IBOutlet weak var phone: UITextField!
+    @IBOutlet weak var confirmP: UITextField!
+    @IBOutlet weak var newP: UITextField!
     @IBOutlet weak var CancelButton: UIButton!
     @IBOutlet weak var OKButton: UIButton!
     
@@ -21,7 +25,7 @@ class PasswordViewController: UIViewController {
         super.viewDidLoad()
         OKButton.layer.cornerRadius=5
         CancelButton.layer.cornerRadius=5
-        
+        self.title="修改密码"
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,9 +47,33 @@ class PasswordViewController: UIViewController {
     
 
     @IBAction func ConfirmButtonClicked(_ sender: Any) {
+        if (origin.text?.isEmpty)! || (newP.text?.isEmpty)! || (confirmP.text?.isEmpty)! || (self.phone.text?.isEmpty)!{
+            let alert = UIAlertController(title: "Alert", message: "不能为空", preferredStyle: UIAlertControllerStyle.alert)
+            let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
+                
+                // Code in this block will trigger when OK button tapped.
+                print("Ok button tapped");
+                
+            }
+            alert.addAction(OKAction)
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        if newP.text != confirmP.text{
+            let alert = UIAlertController(title: "Alert", message: "确认密码相同", preferredStyle: UIAlertControllerStyle.alert)
+            let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
+                
+                // Code in this block will trigger when OK button tapped.
+                print("Ok button tapped");
+                
+            }
+            alert.addAction(OKAction)
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
         let username="pm8"
-        let password="m"
-        let phone="13111111111"
+        let password=self.newP.text!
+        let phone=self.phone.text!
         let name="test"
         let type:[UInt8]=[0x01]
         var _userName:[UInt8]=Array(username.utf8)
