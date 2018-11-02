@@ -1016,6 +1016,20 @@
                                     <segue destination="1BV-eg-bnn" kind="show" id="Ud1-6Q-igF"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="请选择锁具" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ICl-Af-Gw1">
+                                <rect key="frame" x="73" y="93" width="87" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4wV-go-jZs">
+                                <rect key="frame" x="70" y="122" width="232" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -1038,10 +1052,14 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="I23-Li-QZn"/>
                     </view>
+                    <connections>
+                        <outlet property="drop" destination="4wV-go-jZs" id="sZp-Sr-uGo"/>
+                        <outlet property="label" destination="ICl-Af-Gw1" id="V9X-He-qNd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mGF-b2-Riu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2561" y="208"/>
+            <point key="canvasLocation" x="2560.8000000000002" y="207.34632683658174"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="EuU-NK-ei0">
