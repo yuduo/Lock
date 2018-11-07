@@ -8,38 +8,14 @@
 
 import UIKit
 import DropDown
-import BluetoothKit
+
 import CoreBluetooth
-class ControlViewController: UIViewController,CLLocationManagerDelegate ,BKPeripheralDelegate,BKCentralDelegate,BKAvailabilityObserver,CBCentralManagerDelegate ,CBPeripheralDelegate{
-    func availabilityObserver(_ availabilityObservable: BKAvailabilityObservable, availabilityDidChange availability: BKAvailability) {
-        //
-        if availability == .available {
-            scan()
-        } else {
-            //central.interruptScan()
-        }
-    }
+class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentralManagerDelegate ,CBPeripheralDelegate{
     
-    func availabilityObserver(_ availabilityObservable: BKAvailabilityObservable, unavailabilityCauseDidChange unavailabilityCause: BKUnavailabilityCause) {
-        //
-    }
-    
-    func central(_ central: BKCentral, remotePeripheralDidDisconnect remotePeripheral: BKRemotePeripheral) {
-        //
-    }
-    
-    func peripheral(_ peripheral: BKPeripheral, remoteCentralDidConnect remoteCentral: BKRemoteCentral) {
-        //
-    }
-    
-    func peripheral(_ peripheral: BKPeripheral, remoteCentralDidDisconnect remoteCentral: BKRemoteCentral) {
-        //
-    }
     
     var manager: CBCentralManager!
     var peripheral:CBPeripheral!
-    //let central = BKCentral()
-    //let peripheral = BKPeripheral()
+    
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var drop: UIButton!
     let locationManager = CLLocationManager()
@@ -77,33 +53,6 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,BKPerip
         
         queryLock(latitude:"120.665441" ,longitude:"31.2043183")
         
-//        central.delegate = self
-//        central.addAvailabilityObserver(self)
-//        do {
-//            let serviceUUID = UUID(uuidString: "0000ffe1-0000-1000-8000-00805f9b34fb")!
-//            let characteristicUUID = UUID(uuidString: "0000ffe1-0000-1000-8000-00805f9b34fb")!
-//            let configuration = BKConfiguration(dataServiceUUID: serviceUUID , dataServiceCharacteristicUUID: characteristicUUID )
-//            try central.startWithConfiguration(configuration)
-//            // Once the availability observer has been positively notified, you're ready to discover and connect to peripherals.
-//
-//
-//        } catch let error {
-//            // Handle error.
-//        }
-        
-        
-//        peripheral.delegate = self
-//        do {
-//            let serviceUUID = NSUUID(uuidString: "0000ffe1-0000-1000-8000-00805f9b34fb")!
-//            let characteristicUUID = NSUUID(uuidString: "477A2967-1FAB-4DC5-920A-DEE5DE685A3D")!
-//            let localName = "DEVICE_NAME"
-//            let configuration = BKPeripheralConfiguration(dataServiceUUID: serviceUUID as UUID, dataServiceCharacteristicUUID:     characteristicUUID as UUID, localName: localName)
-//            try peripheral.startWithConfiguration(configuration)
-//            // You are now ready for incoming connections
-//        } catch let error {
-//            // Handle error.
-//        }
-
         manager = CBCentralManager(delegate: self, queue: nil ,options:nil)
     }
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -155,26 +104,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,BKPerip
         // Pass the selected object to the new view controller.
     }
     */
-    private func scan() {
-//        central.scanContinuouslyWithChangeHandler({ changes, discoveries in
-//            // Handle changes to "availabile" discoveries, [BKDiscoveriesChange].
-//            // Handle current "available" discoveries, [BKDiscovery].
-//            // This is where you'd ie. update a table view.
-//
-//        }, stateHandler: { newState in
-//            // Handle newState, BKCentral.ContinuousScanState.
-//            // This is where you'd ie. start/stop an activity indicator.
-//            if newState == .scanning {
-//
-//
-//            } else if newState == .stopped {
-//
-//
-//            }
-//        }, duration: 3, inBetweenDelay: 3, errorHandler: { error in
-//            // Handle error.
-//        })
-    }
+    
     @IBAction func directClicked(_ sender: Any) {
         
         
