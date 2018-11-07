@@ -24,6 +24,10 @@ class NetSettingViewController: UIViewController {
         slider.minimumValue=1
         slider.maximumValue=10
         self.title="网络配置"
+        let server=Log.servers()
+        adress.text=server.NMSAdrres
+        port.text=server.NMSPort
+        slider.value=Float(server.Search_Scope) ?? 1
     }
     
     @IBAction func sliderValueChanged(_ sender: UISlider) {

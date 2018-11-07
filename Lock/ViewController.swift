@@ -11,11 +11,12 @@ import CryptoSwift
 import SwiftSocket
 import SwiftMessages
 
-let client = TCPClient(address:
-    "47.99.47.199",
+let server=Log.servers()
 
-                       //"192.168.1.52",
-    port: 5002)
+let client = TCPClient(address:
+    server.NMSAdrres,
+                       
+                       port: Int32(server.NMSPort)!)
 
 class ViewController: UIViewController {
 
@@ -32,6 +33,8 @@ class ViewController: UIViewController {
         eyeButton.setBackgroundImage(UIImage(named: "闭眼"), for: UIControl.State.normal)
         eyeButton.tag=1
         password.isSecureTextEntry = true
+        
+        
     }
 
     @IBAction func eyeClicked(_ sender: Any) {
@@ -105,9 +108,21 @@ class ViewController: UIViewController {
                         loadFaild()
                     }else if response[0] == 0x03 ||  response[0] == 0x04{
                         loadSuccess()
-                        if response[0] == 0x03{
-                            let time=response[4...11]
+                        if response.count > 4{
+                            let _time=response[4...11]
                             let lock=String(data: Data(bytes:response[12...response.count-3]), encoding: String.Encoding.utf8)
+                            if lock != nil {
+                                Log.lock(locks: lock!)
+                            }
+                            
+                            var user=User()
+                            user.UserID=u
+                            user.UserPassWd=p
+                            if !_time.isEmpty{
+                                user.Flash_Date=String(bytes:_time,encoding:.utf8)!
+                            }
+                            user.UserType=String(response[0])
+                            Log.User(user: user)
                         }
                         
                         Log.login(u, "正常登录")
@@ -124,6 +139,11 @@ class ViewController: UIViewController {
                 print("send data faild")
             }
         case .failure(let error):
+            //check local
+            if Log.User(username: u, password: p){
+                Log.login(u, "离线登录")
+                performSegue(withIdentifier: "loginSegue", sender: nil)
+            }
             print("connect faild")
         }
         

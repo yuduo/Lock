@@ -52,5 +52,7 @@
     <string>This app needs your current location</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <true/>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Play with BLE Compatible devices</string>
 </dict>
 </plist>

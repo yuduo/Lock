@@ -76,6 +76,53 @@ class Log: NSObject {
         }
         return logArray
     }
+    
+    class func lock(locks:String){
+        if locks.count == 0{
+            return
+        }
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
+        
+        let ops = Table("lock")
+        let UserID = Expression<String?>("UserID")
+        let Locker_ID = Expression<String?>("Locker_ID")
+        let lockers=locks.components(separatedBy: ",")
+        for lock in lockers{
+            try? db?.run(ops.insert(or: .replace, UserID <- "alice@mac.com", Locker_ID <- lock))
+        }
+    }
+    class func User(user:User){
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
+        
+        let ops = Table("user")
+        let UserID = Expression<String?>("UserID")
+        let UserType = Expression<String?>("UserType")
+        let UserPassWd = Expression<String?>("UserPassWd")
+        let Flash_Date = Expression<String?>("Flash_Date")
+        let Last_Tag = Expression<Int?>("Last_Tag")
+        try? db?.run(ops.insert(or: .replace, UserID <- user.UserID, UserType <- user.UserType, UserPassWd <- user.UserPassWd,Flash_Date <- user.Flash_Date,Last_Tag <- user.Last_Tag))
+        
+    }
+    class func User(username:String,password:String)->Bool{
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
+        
+        let ops = Table("user")
+        let UserID = Expression<String?>("UserID")
+        
+        let UserPassWd = Expression<String?>("UserPassWd")
+        let count = try? db!.scalar(ops.filter(UserID==username&&password==UserPassWd).count)
+        if count! > 0{
+            return true
+        }
+        return false;
+    }
+        
     class func server(_ adress:String,_ port:String,_ scope:String){
         let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
         print(dbPath)
@@ -85,8 +132,25 @@ class Log: NSObject {
         let NMSAdrres = Expression<String?>("NMSAdrres")
         let NMSPort = Expression<String?>("NMSPort")
         let Search_Scope = Expression<String>("Search_Scope")
+        try? db?.run(ops.insert(or: .replace, NMSAdrres <- adress, NMSPort <- port,Search_Scope <- scope))
+
+    }
+    class func servers()->Server{
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
         
-        let insert = ops.insert(NMSAdrres <- adress, NMSPort <- port, Search_Scope <- scope)
-        let rowid = try? db?.run(insert)
+        let settings = Table("setting")
+        let NMSAdrres = Expression<String>("NMSAdrres")
+        let NMSPort = Expression<Int>("NMSPort")
+        let Search_Scope = Expression<Int>("Search_Scope")
+        var server:Server=Server()
+        for setting in try! (db?.prepare(settings))! {
+            
+            server.NMSAdrres=setting[NMSAdrres]
+            server.NMSPort=String(setting[NMSPort])
+            server.Search_Scope=String(setting[Search_Scope])
+        }
+        return server
     }
 }

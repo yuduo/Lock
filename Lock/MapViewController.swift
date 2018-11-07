@@ -92,9 +92,29 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         //设置不可拖拽
         annotationView!.isDraggable = false
         annotationView!.image = UIImage(named:"sina")
+        let btn=UIButton(type: .detailDisclosure)
+        annotationView?.rightCalloutAccessoryView=btn
         return annotationView
     }
-    
+    //call out
+    func mapView(mapView: BMKMapView!, annotationView view: BMKPinAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
+        print("callout accessory control triggered!")
+        
+        let annotation = view.annotation
+        if control == view.rightCalloutAccessoryView {
+            print("right callout button is clicked")
+            let title=String(format: "%s", annotation?.subtitle as! CVarArg)
+            Socket.openLock(lockId: title)
+        }
+    }
+    func mapView(mapView: BMKMapView, didSelectAnnotationView view: BMKPinAnnotationView) {
+        print("Annotation selected")
+        
+        if let annotation = view.annotation as? BMKAnnotation {
+            print("Your annotation title: \(annotation.subtitle)");
+            
+        }
+    }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
@@ -180,8 +200,9 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         for location in LocationArray{
             
             let annotation:BMKPointAnnotation=BMKPointAnnotation()
-            annotation.coordinate = CLLocationCoordinate2DMake(Double(location.latutude)!, Double(location.longitude)!);
-            annotation.title = location.name;
+            annotation.coordinate = CLLocationCoordinate2DMake(Double(location.latutude)!, Double(location.longitude)!)
+            annotation.title = location.name
+            annotation.subtitle=location.id
             _mapView?.addAnnotation(annotation)
         }
         

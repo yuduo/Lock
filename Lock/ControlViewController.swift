@@ -8,7 +8,38 @@
 
 import UIKit
 import DropDown
-class ControlViewController: UIViewController,CLLocationManagerDelegate {
+import BluetoothKit
+import CoreBluetooth
+class ControlViewController: UIViewController,CLLocationManagerDelegate ,BKPeripheralDelegate,BKCentralDelegate,BKAvailabilityObserver,CBCentralManagerDelegate ,CBPeripheralDelegate{
+    func availabilityObserver(_ availabilityObservable: BKAvailabilityObservable, availabilityDidChange availability: BKAvailability) {
+        //
+        if availability == .available {
+            scan()
+        } else {
+            //central.interruptScan()
+        }
+    }
+    
+    func availabilityObserver(_ availabilityObservable: BKAvailabilityObservable, unavailabilityCauseDidChange unavailabilityCause: BKUnavailabilityCause) {
+        //
+    }
+    
+    func central(_ central: BKCentral, remotePeripheralDidDisconnect remotePeripheral: BKRemotePeripheral) {
+        //
+    }
+    
+    func peripheral(_ peripheral: BKPeripheral, remoteCentralDidConnect remoteCentral: BKRemoteCentral) {
+        //
+    }
+    
+    func peripheral(_ peripheral: BKPeripheral, remoteCentralDidDisconnect remoteCentral: BKRemoteCentral) {
+        //
+    }
+    
+    var manager: CBCentralManager!
+    var peripheral:CBPeripheral!
+    //let central = BKCentral()
+    //let peripheral = BKPeripheral()
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var drop: UIButton!
     let locationManager = CLLocationManager()
@@ -45,6 +76,65 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate {
         self.view.addGestureRecognizer(Tap)
         
         queryLock(latitude:"120.665441" ,longitude:"31.2043183")
+        
+//        central.delegate = self
+//        central.addAvailabilityObserver(self)
+//        do {
+//            let serviceUUID = UUID(uuidString: "0000ffe1-0000-1000-8000-00805f9b34fb")!
+//            let characteristicUUID = UUID(uuidString: "0000ffe1-0000-1000-8000-00805f9b34fb")!
+//            let configuration = BKConfiguration(dataServiceUUID: serviceUUID , dataServiceCharacteristicUUID: characteristicUUID )
+//            try central.startWithConfiguration(configuration)
+//            // Once the availability observer has been positively notified, you're ready to discover and connect to peripherals.
+//
+//
+//        } catch let error {
+//            // Handle error.
+//        }
+        
+        
+//        peripheral.delegate = self
+//        do {
+//            let serviceUUID = NSUUID(uuidString: "0000ffe1-0000-1000-8000-00805f9b34fb")!
+//            let characteristicUUID = NSUUID(uuidString: "477A2967-1FAB-4DC5-920A-DEE5DE685A3D")!
+//            let localName = "DEVICE_NAME"
+//            let configuration = BKPeripheralConfiguration(dataServiceUUID: serviceUUID as UUID, dataServiceCharacteristicUUID:     characteristicUUID as UUID, localName: localName)
+//            try peripheral.startWithConfiguration(configuration)
+//            // You are now ready for incoming connections
+//        } catch let error {
+//            // Handle error.
+//        }
+
+        manager = CBCentralManager(delegate: self, queue: nil ,options:nil)
+    }
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .poweredOn: break
+        // manager.scanForPeripherals(withServices: nil, options: nil)
+        case .unknown: break
+            
+        case .resetting: break
+            
+        case .unsupported: break
+            
+        case .unauthorized: break
+            
+        case .poweredOff:
+            
+            break
+            
+        }
+    }
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        
+        if let peripheralName = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
+            print(peripheral.name)
+            
+            if peripheral.name!.range(of:"iODS775") != nil{
+                self.peripheral=peripheral
+                self.peripheral.delegate=self
+                manager.connect(peripheral, options: nil)
+            }
+        }
     }
     override func viewDidAppear(_ animated: Bool) {
         label.isHidden=true
@@ -65,8 +155,32 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate {
         // Pass the selected object to the new view controller.
     }
     */
-
+    private func scan() {
+//        central.scanContinuouslyWithChangeHandler({ changes, discoveries in
+//            // Handle changes to "availabile" discoveries, [BKDiscoveriesChange].
+//            // Handle current "available" discoveries, [BKDiscovery].
+//            // This is where you'd ie. update a table view.
+//
+//        }, stateHandler: { newState in
+//            // Handle newState, BKCentral.ContinuousScanState.
+//            // This is where you'd ie. start/stop an activity indicator.
+//            if newState == .scanning {
+//
+//
+//            } else if newState == .stopped {
+//
+//
+//            }
+//        }, duration: 3, inBetweenDelay: 3, errorHandler: { error in
+//            // Handle error.
+//        })
+    }
     @IBAction func directClicked(_ sender: Any) {
+        
+        
+        manager.scanForPeripherals(withServices: nil, options: nil)
+        
+        
         
     }
     

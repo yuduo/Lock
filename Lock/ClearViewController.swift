@@ -38,7 +38,10 @@ class ClearViewController: UIViewController {
         log.text=String(Log.opCount())
     }
     
-
+    @IBAction func dropClicked(_ sender: Any) {
+        dropDown.show()
+    }
+    
     /*
     // MARK: - Navigation
 
