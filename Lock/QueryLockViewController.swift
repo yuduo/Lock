@@ -12,7 +12,7 @@ import SwiftSocket
 import SwiftMessages
 import DLRadioButton
 class QueryLockViewController: UIViewController,UITableViewDelegate, UITableViewDataSource,UISearchResultsUpdating ,UISearchBarDelegate{
-    var location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(120.665441), Double(31.2043183));
+    var location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
     @IBOutlet weak var nameButton: DLRadioButton!
     
     @IBOutlet weak var codeButton: DLRadioButton!

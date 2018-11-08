@@ -11,8 +11,6 @@ target 'Lock' do #工程名字
   pod 'TDBadgedCell'
   pod 'DLRadioButton'
   pod 'KMPlaceholderTextView'
-  use_frameworks!
-  
-  pod 'BluetoothKit'
+
   
 end

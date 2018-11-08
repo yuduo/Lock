@@ -12,16 +12,16 @@ import DropDown
 import CoreBluetooth
 class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentralManagerDelegate ,CBPeripheralDelegate{
     
-    
     var manager: CBCentralManager!
-    var peripheral:CBPeripheral!
+    var peripheral:CBPeripheral?
     
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var drop: UIButton!
     let locationManager = CLLocationManager()
     var LocationArray:[Location] = []
-    var currentLocation:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(120.665441), Double(31.2043183));
+    var currentLocation:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
     let dropDown = DropDown()
+    var response:[UInt8]=[]
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -73,6 +73,98 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             
         }
     }
+    func centralManager(
+        _ central: CBCentralManager,
+        didConnect peripheral: CBPeripheral) {
+        self.peripheral!.discoverServices(nil)
+    }
+    func centralManager(
+        _ central: CBCentralManager,
+        didFailToConnect peripheral: CBPeripheral,
+        error: Error?) {
+        
+        
+    }
+    func peripheral(
+        _ peripheral: CBPeripheral,
+        didDiscoverServices error: Error?) {
+        for service in peripheral.services! {
+            let thisService = service as CBService
+            
+            if service.uuid == CBUUID(string: "FFE0")  {
+                peripheral.discoverCharacteristics(
+                    nil,
+                    for: thisService
+                )
+            }
+        }
+    }
+    func peripheral(
+        _ peripheral: CBPeripheral,
+        didDiscoverCharacteristicsFor service: CBService,
+        error: Error?) {
+        for characteristic in service.characteristics! {
+            let thisCharacteristic = characteristic as CBCharacteristic
+            
+            if thisCharacteristic.uuid == CBUUID(string: "FFE1") {
+                //self.peripheral?.readValue(for: characteristic)
+                self.peripheral!.setNotifyValue(
+                    true,
+                    for: thisCharacteristic
+                )
+                self.peripheral!.writeValue(sendReadID(), for: characteristic, type: .withoutResponse)
+            }
+            if characteristic.properties.contains(.write) {
+                print("\(characteristic.uuid): properties contains .write")
+            }
+            if characteristic.properties.contains(.notify) {
+                print("\(characteristic.uuid): properties contains .notify")
+            }
+        }
+    }
+    
+    func peripheral(
+        _ peripheral: CBPeripheral,
+        didWriteValueFor characteristic: CBCharacteristic,
+        error: Error?) {
+        print(characteristic.value ?? "no value")
+        let v=characteristic.value
+        
+    }
+    func peripheral(
+        _ peripheral: CBPeripheral,
+        didUpdateValueFor characteristic: CBCharacteristic,
+        error: Error?) {
+        var count:UInt32 = 0;
+        
+        if characteristic.uuid == CBUUID(string: "FFE1") {
+            print(characteristic.value ?? "no value")
+            if characteristic.value?.count ?? 0 > 17{
+                guard let characteristicData = characteristic.value else { return }
+                let byteArray = [UInt8](characteristicData)
+                if byteArray[0] == 126{
+                    response=byteArray
+                    self.peripheral!.writeValue(sendReadID(), for: characteristic, type: .withoutResponse)
+                }else{
+                    response+=byteArray
+                }
+                for element in byteArray {
+                    print(element, terminator: "")
+                }
+            }
+            if response.count > 20{
+                let m:[UInt8]=Array(response[20...37])
+                var crc=m.crc16()
+                let bytePtr = withUnsafePointer(to: &crc) {
+                    $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                        UnsafeBufferPointer(start: $0, count: 2)
+                    }
+                }
+                let byteArray = Array(bytePtr)
+                sendOpenLock(message: byteArray)
+            }
+        }
+    }
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
         if let peripheralName = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
@@ -80,10 +172,39 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             
             if peripheral.name!.range(of:"iODS775") != nil{
                 self.peripheral=peripheral
-                self.peripheral.delegate=self
-                manager.connect(peripheral, options: nil)
+                self.peripheral!.delegate=self
+                self.manager.connect(self.peripheral!, options: nil)
+                self.manager.stopScan()
             }
         }
+    }
+    private func sendReadID()->Data{
+        let m:[UInt8]=[0x00,0x10, 0x01,0x00,0x01,0x00,0x02,0x61,0xff]
+        
+        var crc=m.crc16()
+        
+        let bytePtr = withUnsafePointer(to: &crc) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                UnsafeBufferPointer(start: $0, count: 2)
+            }
+        }
+        let byteArray = Array(bytePtr)
+        let data = Data(bytes: [0x7e, 0x00,0x10, 0x01,0x00,0x01,0x00,0x02,0x61,0xff]+[0x0f,0x67]+[0x7e])
+        return data
+    }
+    private func sendOpenLock(message:[UInt8]){
+        
+        let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x61,0xff]+message
+        
+        var crc=m.crc16()
+        
+        let bytePtr = withUnsafePointer(to: &crc) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                UnsafeBufferPointer(start: $0, count: 2)
+            }
+        }
+        let byteArray = Array(bytePtr)
+        let data = Data(bytes: [0x7e, 0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x61,0xff]+message+byteArray+[0x7e])
     }
     override func viewDidAppear(_ animated: Bool) {
         label.isHidden=true

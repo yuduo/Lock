@@ -13,7 +13,7 @@ extension UIViewController {
         let success = MessageView.viewFromNib(layout: .cardView)
         success.configureTheme(.success)
         success.configureDropShadow()
-        success.configureContent(title: "Success", body: "Something good happened!")
+        success.configureContent(title: "Success", body: "数据更新成功!")
         success.button?.isHidden = true
         var successConfig = SwiftMessages.defaultConfig
         successConfig.presentationStyle = .top
@@ -23,7 +23,7 @@ extension UIViewController {
     func loadFaild(){
         let error = MessageView.viewFromNib(layout: .tabView)
         error.configureTheme(.error)
-        error.configureContent(title: "Error", body: "Something is horribly wrong!")
+        error.configureContent(title: "Error", body: "数据更新失败!")
         
         
         SwiftMessages.show(view: error)

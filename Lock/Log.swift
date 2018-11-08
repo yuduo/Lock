@@ -24,6 +24,7 @@ class Log: NSObject {
         let dateString = dateFormatter.string(from: date)
         let insert = ops.insert(User_Account <- user, Date_Time <- dateString, Operation_Record <- record)
         let rowid = try? db?.run(insert)
+        
     }
     class func opCount()->Int{
         let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path

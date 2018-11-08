@@ -35,7 +35,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         }
         
         queryLock(latitude: "120.665441",longitude: "31.2043183");
-        let location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(120.665441), Double(31.2043183));
+        let location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
         _mapView?.setCenter(location, animated: true)
         
         //显示定位图层
@@ -72,30 +72,54 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         _mapView?.viewWillDisappear()
         _mapView?.delegate = nil // 不用时，置nil
     }
-    
+    @objc func showAnnotation(sender: AnyObject) {
+        print("Disclosure button clicked")
+    }
     // 根据anntation生成对应的View
-    func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
+    func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
         
         //        //annotation
-        let annotationViewID = "renameMark"
-        var annotationView:BMKPinAnnotationView? = _mapView?.dequeueReusableAnnotationView(withIdentifier: annotationViewID) as? BMKPinAnnotationView
-        
-        if(annotationView == nil){
-            
-            annotationView = BMKPinAnnotationView.init(annotation:annotation, reuseIdentifier:annotationViewID)
+//        let annotationViewID = "renameMark"
+//        var annotationView:BMKPinAnnotationView? = _mapView?.dequeueReusableAnnotationView(withIdentifier: annotationViewID) as? BMKPinAnnotationView
+//
+//        if(annotationView == nil){
+//
+//            annotationView = BMKPinAnnotationView.init(annotation:annotation, reuseIdentifier:annotationViewID)
+//        }
+//
+//        //设置颜色
+//        //            annotationView?.pinColor = BMKPinAnnotationColorPurple
+//        //从天上掉下来效果
+//        annotationView!.animatesDrop = true
+//        //设置不可拖拽
+//        annotationView!.isDraggable = false
+//        //annotationView!.image = UIImage(named:"sina")
+//        annotationView?.canShowCallout = true
+//        let btn=UIButton(type: .detailDisclosure)
+//        annotationView?.rightCalloutAccessoryView=btn
+//        btn.addTarget(self, action: #selector(MapViewController.showAnnotation), for: .touchUpInside)
+//
+//        return annotationView
+        let reuserId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuserId)
+            as? BMKPinAnnotationView
+        if pinView == nil {
+            //创建一个大头针视图
+            pinView = BMKPinAnnotationView(annotation: annotation, reuseIdentifier: reuserId)
+            pinView?.canShowCallout = true
+            pinView?.animatesDrop = true
+           
+            //设置大头针点击注释视图的右侧按钮样式
+            let btn=UIButton(type: .detailDisclosure)
+            btn.addTarget(self, action: #selector(MapViewController.showAnnotation), for: .touchUpInside)
+            pinView?.rightCalloutAccessoryView=btn
+        }else{
+            pinView?.annotation = annotation
         }
         
-        //设置颜色
-        //            annotationView?.pinColor = BMKPinAnnotationColorPurple
-        //从天上掉下来效果
-        annotationView!.animatesDrop = true
-        //设置不可拖拽
-        annotationView!.isDraggable = false
-        annotationView!.image = UIImage(named:"sina")
-        let btn=UIButton(type: .detailDisclosure)
-        annotationView?.rightCalloutAccessoryView=btn
-        return annotationView
+        return pinView
     }
+    
     //call out
     func mapView(mapView: BMKMapView!, annotationView view: BMKPinAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
         print("callout accessory control triggered!")
@@ -118,7 +142,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        //print("locations = \(locValue.latitude) \(locValue.longitude)")
         
     }
     
@@ -179,8 +203,8 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                         print(location.longitude)
                         print(location.latutude)
                         print(location.id)
-                        Socket.openLock(lockId:location.id)
-                        Socket.openLock(longitude:location.longitude,latutude:location.latutude,lockId:location.id)
+                        //Socket.openLock(lockId:location.id)
+                        //Socket.openLock(longitude:location.longitude,latutude:location.latutude,lockId:location.id)
                     }
                     addAnnotation()
                 
@@ -202,7 +226,8 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
             let annotation:BMKPointAnnotation=BMKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2DMake(Double(location.latutude)!, Double(location.longitude)!)
             annotation.title = location.name
-            annotation.subtitle=location.id
+            //annotation.subtitle=location.id
+            
             _mapView?.addAnnotation(annotation)
         }
         

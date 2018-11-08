@@ -12,7 +12,7 @@ class LocationViewController: UIViewController ,BMKMapViewDelegate,CLLocationMan
     var _mapView: BMKMapView?
     let locationManager = CLLocationManager()
     var LocationArray:[Location] = []
-    var location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(120.665441), Double(31.2043183));
+    var location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
     var name:String=""
     override func viewDidLoad() {
         super.viewDidLoad()
