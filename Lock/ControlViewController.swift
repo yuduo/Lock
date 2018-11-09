@@ -135,25 +135,28 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         _ peripheral: CBPeripheral,
         didUpdateValueFor characteristic: CBCharacteristic,
         error: Error?) {
-        var count:UInt32 = 0;
         
         if characteristic.uuid == CBUUID(string: "FFE1") {
             print(characteristic.value ?? "no value")
-            if characteristic.value?.count ?? 0 > 17{
+            if characteristic.value?.count ?? 0 > 7{
                 guard let characteristicData = characteristic.value else { return }
                 let byteArray = [UInt8](characteristicData)
-                if byteArray[0] == 126{
+                if ((byteArray[0] == 126)&&(byteArray[byteArray.count-1] != 126)){
                     response=byteArray
-                    self.peripheral!.writeValue(sendReadID(), for: characteristic, type: .withoutResponse)
-                }else{
-                    response+=byteArray
+                    self.peripheral!.writeValue(sendReadIDNext(byte: 0x02), for: characteristic, type: .withoutResponse)
+                }else if((byteArray[0] == 126)&&(byteArray[byteArray.count-1] == 126)){
+                    
+                }
+                else{
+                    response+=byteArray[2...byteArray.count]
+                    self.peripheral!.writeValue(sendReadIDNext(byte: 0x03), for: characteristic, type: .withoutResponse)
                 }
                 for element in byteArray {
                     print(element, terminator: "")
                 }
             }
-            if response.count > 20{
-                let m:[UInt8]=Array(response[20...37])
+            if ((response.count > 20)&&(response[response.count-1]==126)){
+                let m:[UInt8]=Array(response[10...26])
                 var crc=m.crc16()
                 let bytePtr = withUnsafePointer(to: &crc) {
                     $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
@@ -161,7 +164,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                     }
                 }
                 let byteArray = Array(bytePtr)
-                sendOpenLock(message: byteArray)
+                sendOpenLock(message: byteArray, for:characteristic)
             }
         }
     }
@@ -192,7 +195,22 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         let data = Data(bytes: [0x7e, 0x00,0x10, 0x01,0x00,0x01,0x00,0x02,0x61,0xff]+[0x0f,0x67]+[0x7e])
         return data
     }
-    private func sendOpenLock(message:[UInt8]){
+    private func sendReadIDNext(byte:UInt8)->Data{
+        let message:[UInt8]=[byte]
+        let m:[UInt8]=[0x00,0x10, 0x01,0x00,0x01,0x00,0x02,0x61,0x6c]+message
+        
+        var crc=m.crc16()
+        
+        let bytePtr = withUnsafePointer(to: &crc) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                UnsafeBufferPointer(start: $0, count: 2)
+            }
+        }
+        let byteArray = Array(bytePtr)
+        let data = Data(bytes: [0x7e, 0x00,0x10, 0x01,0x00,0x01,0x00,0x02,0x61,0x6c]+message+byteArray+[0x7e])
+        return data
+    }
+    private func sendOpenLock(message:[UInt8] ,for characteristic: CBCharacteristic){
         
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x61,0xff]+message
         
@@ -205,6 +223,8 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         }
         let byteArray = Array(bytePtr)
         let data = Data(bytes: [0x7e, 0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x61,0xff]+message+byteArray+[0x7e])
+        self.peripheral!.writeValue(data, for: characteristic, type: .withoutResponse)
+        Toast.show(message: "开锁成功！", controller: self)
     }
     override func viewDidAppear(_ animated: Bool) {
         label.isHidden=true
@@ -243,7 +263,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         // Action triggered on selection
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.drop.setTitle(item, for: .normal)
-            Socket.openLock(longitude: String(format:"%f",(self?.currentLocation.longitude)!),latutude: String(format:"%f",(self?.currentLocation.latitude)!),lockId: (self?.LocationArray[index].id)!)
+            Socket.openLock(longitude: String(format:"%f",(self?.currentLocation.longitude)!),latutude: String(format:"%f",(self?.currentLocation.latitude)!),lockId: (self?.LocationArray[index].id)!,controller:self!)
         }
     }
     
@@ -255,7 +275,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         // Action triggered on selection
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.drop.setTitle(item, for: .normal)
-            Socket.openLock(lockId: (self?.LocationArray[index].id)!)
+            Socket.openLock(lockId: (self?.LocationArray[index].id)!,controller:self!)
         }
     }
     
@@ -346,5 +366,11 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             list.append(location.name)
         }
         return list
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
     }
 }

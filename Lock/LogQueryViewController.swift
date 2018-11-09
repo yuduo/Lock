@@ -40,6 +40,10 @@ class LogQueryViewController: UIViewController {
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.dropButton.setTitle(item, for: .normal)
         }
+        if getUsers().count>0{
+            dropDown.selectRow(at: 0)
+            self.dropButton.setTitle(getUsers()[0], for: .normal)
+        }
         chooseView.isHidden=false
         dropDown.hide()
         downView.isHidden=true
@@ -154,8 +158,13 @@ class LogQueryViewController: UIViewController {
     
     func getUsers()->[String]{
         var list:[String]=[]
-        for operation in logArray{
-            list.append(operation.User_Account)
+        for l in logArray{
+            if list.contains(l.User_Account){
+                
+            }else{
+                list.append(l.User_Account)
+            }
+            
         }
         return list
     }

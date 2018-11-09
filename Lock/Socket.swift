@@ -59,7 +59,7 @@ class Socket: NSObject {
     
     }
     
-    class func openLock(longitude:String,latutude:String,lockId:String){
+    class func openLock(longitude:String,latutude:String,lockId:String, controller: UIViewController){
         let username="pm8"
         var _userName:[UInt8]=Array(username.utf8)
         
@@ -92,9 +92,9 @@ class Socket: NSObject {
                 let response=rdata[20]
                 if response != 0{
                     //faild
-                    //loadFaild()
+                    Toast.show(message: "请求失败！", controller: controller)
                 }else {
-                    //loadSuccess()
+                    Toast.show(message: "请求开锁成功！", controller: controller)
                     
                 }
                 
@@ -106,7 +106,7 @@ class Socket: NSObject {
         }
     }
     
-    class func openLock(lockId:String){
+    class func openLock(lockId:String, controller: UIViewController){
         let username="pm8"
         var _userName:[UInt8]=Array(username.utf8)
         
@@ -139,9 +139,9 @@ class Socket: NSObject {
                 let response=rdata[20]
                 if response == 1{
                     //faild
-                    //loadFaild()
+                    Toast.show(message: "请求失败！", controller: controller)
                 }else {
-                    //loadSuccess()
+                    Toast.show(message: "远程开锁成功！", controller: controller)
                     
                 }
                 

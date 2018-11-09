@@ -10,20 +10,20 @@ import UIKit
 import SwiftMessages
 extension UIViewController {
     func loadSuccess(){
-        let success = MessageView.viewFromNib(layout: .cardView)
-        success.configureTheme(.success)
-        success.configureDropShadow()
-        success.configureContent(title: "Success", body: "数据更新成功!")
-        success.button?.isHidden = true
-        var successConfig = SwiftMessages.defaultConfig
-        successConfig.presentationStyle = .top
-        
-        SwiftMessages.show(config: successConfig, view: success)
+//        let success = MessageView.viewFromNib(layout: .cardView)
+//        success.configureTheme(.success)
+//        success.configureDropShadow()
+//        success.configureContent(title: "数据更新成功!", body: "")
+//        success.button?.isHidden = true
+//        var successConfig = SwiftMessages.defaultConfig
+//        successConfig.presentationStyle = .top
+//
+//        SwiftMessages.show(config: successConfig, view: success)
     }
     func loadFaild(){
         let error = MessageView.viewFromNib(layout: .tabView)
         error.configureTheme(.error)
-        error.configureContent(title: "Error", body: "数据更新失败!")
+        error.configureContent(title: "数据更新失败!", body: "")
         
         
         SwiftMessages.show(view: error)

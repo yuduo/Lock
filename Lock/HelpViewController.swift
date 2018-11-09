@@ -59,7 +59,7 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
             performSegue(withIdentifier: "feedback", sender: nil)
         case 2:
             //
-            let url=URL(string: "")
+            let url=URL(string: "https://itunes.apple.com/id382165332")
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url!, options: [:], completionHandler: nil)
             } else {
@@ -69,5 +69,10 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
         default:
             performSegue(withIdentifier: "feedback", sender: nil)
         }
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
     }
 }

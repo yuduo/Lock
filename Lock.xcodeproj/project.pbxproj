@@ -41,6 +41,8 @@
 		B6AB0A1D217F239300136B2F /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB0A1C217F239300136B2F /* AboutViewController.swift */; };
 		B6AB0A1F2188461300136B2F /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB0A1E2188461200136B2F /* LocationViewController.swift */; };
 		B6AB0A212189799A00136B2F /* ControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB0A202189799A00136B2F /* ControlViewController.swift */; };
+		B6E3AF7321951C3800FEC68E /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E3AF7221951C3800FEC68E /* Toast.swift */; };
+		B6E3AF752195946E00FEC68E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E3AF742195946D00FEC68E /* MainViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +85,8 @@
 		B6AB0A1C217F239300136B2F /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		B6AB0A1E2188461200136B2F /* LocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		B6AB0A202189799A00136B2F /* ControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlViewController.swift; sourceTree = "<group>"; };
+		B6E3AF7221951C3800FEC68E /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		B6E3AF742195946D00FEC68E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +169,8 @@
 				B6AB0A1A217F230500136B2F /* FeedbackViewController.swift */,
 				B6AB0A1C217F239300136B2F /* AboutViewController.swift */,
 				B6AB0A202189799A00136B2F /* ControlViewController.swift */,
+				B6E3AF7221951C3800FEC68E /* Toast.swift */,
+				B6E3AF742195946D00FEC68E /* MainViewController.swift */,
 			);
 			path = Lock;
 			sourceTree = "<group>";
@@ -342,6 +348,7 @@
 				B69EC3AD2179B0C000692188 /* Log.swift in Sources */,
 				B669987C216B009800C4C0AF /* ViewController.swift in Sources */,
 				B69EC38B21706BA800692188 /* MapViewController.swift in Sources */,
+				B6E3AF752195946E00FEC68E /* MainViewController.swift in Sources */,
 				B69EC39A2170A06000692188 /* Operation.swift in Sources */,
 				B69EC3A72178709500692188 /* PasswordViewController.swift in Sources */,
 				B6AB0A15217F18BA00136B2F /* NetSettingViewController.swift in Sources */,
@@ -351,6 +358,7 @@
 				B6AB0A1F2188461300136B2F /* LocationViewController.swift in Sources */,
 				B6AB0A17217F1BE500136B2F /* ClearViewController.swift in Sources */,
 				B69EC3AB21796D1500692188 /* Socket.swift in Sources */,
+				B6E3AF7321951C3800FEC68E /* Toast.swift in Sources */,
 				B6AB0A0F217F14EC00136B2F /* ManageTableViewController.swift in Sources */,
 				B69EC39F217495A000692188 /* QueryLockViewController.swift in Sources */,
 				B69EC3A121758F4A00692188 /* Lock.swift in Sources */,

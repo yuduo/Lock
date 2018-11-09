@@ -34,7 +34,8 @@ class ClearViewController: UIViewController {
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.drop.setTitle(item, for: .normal)
         }
-        
+        dropDown.selectRow(at: 0)
+        self.drop.setTitle("一个月", for: .normal)
         log.text=String(Log.opCount())
     }
     

@@ -16,7 +16,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
     var LocationArray:[Location] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title="地图方式"
         // Do any additional setup after loading the view.
         _mapView = BMKMapView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         self.view.addSubview(_mapView!)
@@ -72,8 +72,14 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         _mapView?.viewWillDisappear()
         _mapView?.delegate = nil // 不用时，置nil
     }
-    @objc func showAnnotation(sender: AnyObject) {
+    @objc func showAnnotation(sender: UIButton) {
         print("Disclosure button clicked")
+        let tag=sender.tag
+        if LocationArray.count > tag{
+            let l=LocationArray[tag]
+            
+            Socket.openLock(longitude:l.longitude,latutude:l.latutude,lockId:l.id,controller:self)
+        }
     }
     // 根据anntation生成对应的View
     func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
@@ -112,23 +118,40 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
             //设置大头针点击注释视图的右侧按钮样式
             let btn=UIButton(type: .detailDisclosure)
             btn.addTarget(self, action: #selector(MapViewController.showAnnotation), for: .touchUpInside)
+            btn.tag=getTag(annotation.title!(),annotation.subtitle!())
             pinView?.rightCalloutAccessoryView=btn
+            
+            pinView?.isEnabled=true
+            //pinView?.calloutOffset = CGPoint(x: -5, y: 5)
         }else{
             pinView?.annotation = annotation
         }
         
         return pinView
     }
-    
+    func getTag(_ title:String,_ subtitle:String)->Int{
+        var i:Int=0
+        for l in LocationArray{
+            i+=1
+
+            if ((l.name==title) && (l.id==subtitle)){
+                return i
+            }
+
+            
+        }
+        return 0
+    }
     //call out
-    func mapView(mapView: BMKMapView!, annotationView view: BMKPinAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
+    func mapView(
+        _ mapView: BMKMapView, annotationView view: BMKPinAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         print("callout accessory control triggered!")
         
         let annotation = view.annotation
         if control == view.rightCalloutAccessoryView {
             print("right callout button is clicked")
             let title=String(format: "%s", annotation?.subtitle as! CVarArg)
-            Socket.openLock(lockId: title)
+            Socket.openLock(lockId: title,controller:self)
         }
     }
     func mapView(mapView: BMKMapView, didSelectAnnotationView view: BMKPinAnnotationView) {
@@ -191,9 +214,9 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                         var location:Location!=Location()
                         let lon=loc[0...9]
                         let lan=loc[10...19]
-                        let id=loc[20...26]
-                        let name=loc[26...76]
-                        let warning=loc[77]
+                        let id=loc[20...36]
+                        let name=loc[37...77]
+                        let warning=loc[78]
                         location.longitude=String(data: Data(bytes:lon), encoding: String.Encoding.utf8)!
                         location.latutude=String(data: Data(bytes:lan), encoding: String.Encoding.utf8)!
                         location.id=String(data: Data(bytes:id), encoding: String.Encoding.utf8)!
@@ -204,7 +227,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                         print(location.latutude)
                         print(location.id)
                         //Socket.openLock(lockId:location.id)
-                        //Socket.openLock(longitude:location.longitude,latutude:location.latutude,lockId:location.id)
+                        
                     }
                     addAnnotation()
                 
@@ -226,7 +249,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
             let annotation:BMKPointAnnotation=BMKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2DMake(Double(location.latutude)!, Double(location.longitude)!)
             annotation.title = location.name
-            //annotation.subtitle=location.id
+            annotation.subtitle=location.id
             
             _mapView?.addAnnotation(annotation)
         }

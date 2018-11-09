@@ -169,7 +169,7 @@
         <!--亨通门禁-->
         <scene sceneID="hLR-hy-Kve">
             <objects>
-                <viewController id="ni8-Jc-Jxc" sceneMemberID="viewController">
+                <viewController id="ni8-Jc-Jxc" customClass="MainViewController" customModule="Lock" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IdH-kk-fFf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
