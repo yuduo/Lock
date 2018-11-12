@@ -36,13 +36,19 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
         //tableview.tableHeaderView = searchController.searchBar
         self.tableview.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        queryAll(str: "")
+       
         nameButton.isSelected=true
         codeButton.isSelected=false
         
         searchBar.delegate=self
+        nameButton.addTarget(self, action: #selector(QueryLockViewController.logSelectedButton), for: UIControlEvents.touchUpInside);
+        codeButton.addTarget(self, action: #selector(QueryLockViewController.logSelectedButton), for: UIControlEvents.touchUpInside);
+        queryAll(str: "")
     }
 
+    @objc @IBAction private func logSelectedButton(radioButton : DLRadioButton) {
+        queryAll(str: "")
+    }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         print(searchText)
@@ -138,6 +144,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                         print(response.count)
                         let size=response[0]
                         let locks=Array(response[1...response.count-1])
+                        LockArray.removeAll()
                         //let count:Int=Int((size+1)*70+1)
                        // if  count==response.count{
                             for i in 0...size{

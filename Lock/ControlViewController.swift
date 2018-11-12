@@ -51,7 +51,6 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         let Tap = UITapGestureRecognizer(target: self, action: #selector(LogQueryViewController.Tap))
         self.view.addGestureRecognizer(Tap)
         
-        queryLock(latitude:"120.665441" ,longitude:"31.2043183")
         
         manager = CBCentralManager(delegate: self, queue: nil ,options:nil)
     }
@@ -68,7 +67,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         case .unauthorized: break
             
         case .poweredOff:
-            
+            Toast.show(message: "请打开蓝牙！", controller: self)
             break
             
         }
@@ -143,13 +142,17 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 let byteArray = [UInt8](characteristicData)
                 if ((byteArray[0] == 126)&&(byteArray[byteArray.count-1] != 126)){
                     response=byteArray
-                    self.peripheral!.writeValue(sendReadIDNext(byte: 0x02), for: characteristic, type: .withoutResponse)
+                    self.peripheral!.writeValue(sendReadIDNext(byte: 0x01), for: characteristic, type: .withoutResponse)
                 }else if((byteArray[0] == 126)&&(byteArray[byteArray.count-1] == 126)){
+                    
+                }else if((byteArray[0] == 255)&&(byteArray[byteArray.count-1] == 255)){
                     
                 }
                 else{
-                    response+=byteArray[2...byteArray.count]
-                    self.peripheral!.writeValue(sendReadIDNext(byte: 0x03), for: characteristic, type: .withoutResponse)
+                    response+=byteArray[2...byteArray.count-1]
+                    if byteArray[0]>byteArray[1]{
+                        self.peripheral!.writeValue(sendReadIDNext(byte: 0x02), for: characteristic, type: .withoutResponse)
+                    }
                 }
                 for element in byteArray {
                     print(element, terminator: "")
@@ -212,7 +215,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     }
     private func sendOpenLock(message:[UInt8] ,for characteristic: CBCharacteristic){
         
-        let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x61,0xff]+message
+        let m:[UInt8]=[0x00,0x10, 0x01,0x00,0x01,0x00,0x01,0x61,0xff]+message
         
         var crc=m.crc16()
         
@@ -222,11 +225,13 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             }
         }
         let byteArray = Array(bytePtr)
-        let data = Data(bytes: [0x7e, 0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x61,0xff]+message+byteArray+[0x7e])
+        let data = Data(bytes: [0x7e, 0x00,0x10, 0x01,0x00,0x01,0x00,0x01,0x61,0xff]+message+byteArray+[0x7e])
         self.peripheral!.writeValue(data, for: characteristic, type: .withoutResponse)
         Toast.show(message: "开锁成功！", controller: self)
     }
     override func viewDidAppear(_ animated: Bool) {
+        //queryLock(latitude:String(currentLocation.latitude) ,longitude:String(currentLocation.longitude))
+        queryLock(latitude:"120.665441" ,longitude:"31.2043183")
         label.isHidden=true
         drop.isHidden=true
         dropDown.hide()
@@ -290,7 +295,12 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         var _latitude:[UInt8]=Array(latitude.utf8)
         var _longitude:[UInt8]=Array(longitude.utf8)
         
-        
+        if _latitude.count > 10{
+            _latitude=Array(latitude.prefix(10).utf8)
+        }
+        if _longitude.count > 10{
+            _longitude=Array(longitude.prefix(10).utf8)
+        }
         for _ in _latitude.count..<10{
             _latitude.append(0x00)
         }
@@ -327,14 +337,24 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                     return
                 }
                 loadSuccess()
+                LocationArray.removeAll()
                 let loc=Array(response[2...response.count-2])
                 for i in 0...count{
                     var location:Location!=Location()
-                    let lon=loc[0...9]
-                    let lan=loc[10...19]
-                    let id=loc[20...26]
-                    let name=loc[26...76]
-                    let warning=loc[77]
+                    var s:Int=Int(0+i*88)
+                    var e:Int=Int(9+i*88)
+                    let lon=loc[s...e]
+                    s=Int(10+i*88)
+                    e=Int(19+i*88)
+                    let lan=loc[s...e]
+                    s=Int(20+i*88)
+                    e=Int(36+i*88)
+                    let id=loc[s...e]
+                    s=Int(37+i*88)
+                    e=Int(86+i*88)
+                    let name=loc[s...e]
+                    
+                    let warning=loc[Int(87+i*88)]
                     location.longitude=String(data: Data(bytes:lon), encoding: String.Encoding.utf8)!
                     location.latutude=String(data: Data(bytes:lan), encoding: String.Encoding.utf8)!
                     location.id=String(data: Data(bytes:id), encoding: String.Encoding.utf8)!

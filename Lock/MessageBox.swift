@@ -24,7 +24,7 @@ extension UIViewController {
         let error = MessageView.viewFromNib(layout: .tabView)
         error.configureTheme(.error)
         error.configureContent(title: "数据更新失败!", body: "")
-        
+        error.button?.isHidden = true
         
         SwiftMessages.show(view: error)
     }

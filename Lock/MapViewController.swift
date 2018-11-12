@@ -212,11 +212,11 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                     let loc=Array(response[2...response.count-2])
                     for i in 0...count{
                         var location:Location!=Location()
-                        let lon=loc[0...9]
-                        let lan=loc[10...19]
-                        let id=loc[20...36]
-                        let name=loc[37...77]
-                        let warning=loc[78]
+                        let lon=loc[Int(0+i*88)...Int(9+i*88)]
+                        let lan=loc[Int(10+i*88)...Int(19+i*88)]
+                        let id=loc[Int(20+i*88)...Int(36+i*88)]
+                        let name=loc[Int(37+i*88)...Int(86+i*88)]
+                        let warning=loc[Int(87+i*88)]
                         location.longitude=String(data: Data(bytes:lon), encoding: String.Encoding.utf8)!
                         location.latutude=String(data: Data(bytes:lan), encoding: String.Encoding.utf8)!
                         location.id=String(data: Data(bytes:id), encoding: String.Encoding.utf8)!

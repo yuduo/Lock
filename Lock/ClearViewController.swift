@@ -12,6 +12,7 @@ class ClearViewController: UIViewController {
     @IBOutlet weak var ticket: UILabel!
     @IBOutlet weak var log: UILabel!
     
+    @IBOutlet weak var total: UILabel!
     @IBOutlet weak var drop: UIButton!
     @IBOutlet weak var CancelButton: UIButton!
     @IBOutlet weak var OKButton: UIButton!

@@ -310,10 +310,17 @@
                                 <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UCb-UR-2gu">
+                                <rect key="frame" x="184" y="74" width="18" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="OlE-X8-KYy" firstAttribute="top" secondItem="LvN-bZ-SQU" secondAttribute="bottom" constant="12" id="6NZ-eL-92r"/>
+                            <constraint firstItem="UCb-UR-2gu" firstAttribute="leading" secondItem="6cf-J7-60o" secondAttribute="trailing" constant="2" id="BHH-WY-dOZ"/>
                             <constraint firstItem="LvN-bZ-SQU" firstAttribute="leading" secondItem="6cf-J7-60o" secondAttribute="leading" id="Ezp-ww-hhE"/>
                             <constraint firstItem="rio-bv-ghz" firstAttribute="centerY" secondItem="CU7-fI-RzK" secondAttribute="centerY" id="GZp-r9-OdD"/>
                             <constraint firstItem="OlE-X8-KYy" firstAttribute="leading" secondItem="aka-RG-EyW" secondAttribute="leading" constant="43" id="IPz-y0-mav"/>
@@ -326,6 +333,7 @@
                             <constraint firstItem="aka-RG-EyW" firstAttribute="trailing" secondItem="OlE-X8-KYy" secondAttribute="trailing" constant="43" id="XoW-IU-ZUp"/>
                             <constraint firstItem="j90-aZ-aUl" firstAttribute="top" secondItem="CU7-fI-RzK" secondAttribute="bottom" constant="2" id="YFC-5f-HJg"/>
                             <constraint firstItem="rio-bv-ghz" firstAttribute="leading" secondItem="CU7-fI-RzK" secondAttribute="trailing" constant="23" id="YZl-S1-C5m"/>
+                            <constraint firstItem="UCb-UR-2gu" firstAttribute="centerY" secondItem="6cf-J7-60o" secondAttribute="centerY" id="bUR-eJ-LCE"/>
                             <constraint firstItem="kRi-5t-Oo1" firstAttribute="top" secondItem="rio-bv-ghz" secondAttribute="bottom" constant="2" id="ecY-95-HHn"/>
                             <constraint firstItem="LvN-bZ-SQU" firstAttribute="top" secondItem="j90-aZ-aUl" secondAttribute="bottom" constant="8" id="mJ0-yY-19c"/>
                             <constraint firstItem="j90-aZ-aUl" firstAttribute="leading" secondItem="6cf-J7-60o" secondAttribute="leading" id="pUU-Xo-Trs"/>
@@ -341,6 +349,7 @@
                         <outlet property="drop" destination="OlE-X8-KYy" id="T5T-kl-05z"/>
                         <outlet property="log" destination="kRi-5t-Oo1" id="UWe-p2-pK2"/>
                         <outlet property="ticket" destination="rio-bv-ghz" id="byn-6S-D0s"/>
+                        <outlet property="total" destination="UCb-UR-2gu" id="VB0-wP-tfM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qdV-XX-P7O" userLabel="First Responder" sceneMemberID="firstResponder"/>
