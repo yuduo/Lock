@@ -110,11 +110,19 @@ class LogQueryViewController: UIViewController {
     */
 
     @IBAction func queryButtonClicked(_ sender: Any) {
-        
+        if(segment.selectedSegmentIndex == 0){
+            //by time
+            
+        }else{
+            //search by user
+        }
         performSegue(withIdentifier: "logList", sender: nil)
         //let alice = users.filter(id == rowid)//查询
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
         if segue.identifier == "logList"
         {
             if let destinationVC = segue.destination as? LogTableViewController {

@@ -174,6 +174,10 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
+
         if segue.identifier == "location"
         {
             if let destinationVC = segue.destination as? LocationViewController {

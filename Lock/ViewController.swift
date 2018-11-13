@@ -94,7 +94,7 @@ class ViewController: UIViewController {
         
         
         
-        switch client.connect(timeout: 60) {
+        switch client.connect(timeout: 30) {
         case .success:
             switch client.send(data:data ) {
             case .success:
@@ -138,6 +138,7 @@ class ViewController: UIViewController {
             case .failure(let error):
                 print("send data faild")
             }
+            break
         case .failure(let error):
             //check local
             if Log.User(username: u, password: p){
@@ -145,6 +146,7 @@ class ViewController: UIViewController {
                 performSegue(withIdentifier: "loginSegue", sender: nil)
             }
             print("connect faild")
+            break
         }
         
     }

@@ -23,9 +23,9 @@ class LogTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    func load(operation:Operation){
-        timeLabel.text=operation.Date_Time
-        targetLabel.text=operation.User_Account
-        opeLabel.text=operation.Operation_Record
+    func set(operation:Operation){
+        self.timeLabel.text=operation.Date_Time
+        self.targetLabel.text=operation.User_Account
+        self.opeLabel.text=operation.Operation_Record
     }
 }

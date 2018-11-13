@@ -210,7 +210,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                 
                     loadSuccess()
                     let loc=Array(response[2...response.count-2])
-                    for i in 0...count{
+                    for i in 0..<count{
                         var location:Location!=Location()
                         let lon=loc[Int(0+i*88)...Int(9+i*88)]
                         let lan=loc[Int(10+i*88)...Int(19+i*88)]

@@ -19,6 +19,7 @@ internal var logArray:[Operation] = []
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.title="日志查询"
+        //self.tableView.register(LogTableViewCell.classForCoder(), forCellReuseIdentifier: "LogTableViewCell")
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,15 +41,18 @@ internal var logArray:[Operation] = []
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "LogTableViewCell")
-            as? LogTableViewCell else {
-                return UITableViewCell()
-        }
-        cell.load(operation: logArray[indexPath.row])
+        //var cell:LogTableViewCell? = tableView.dequeueReusableCell(
+        //    withIdentifier: "LogTableViewCell") as? LogTableViewCell
+            //as LogTableViewCell
+        
+         //cell = LogTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "LogTableViewCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "LogTableViewCell", for: indexPath) as! LogTableViewCell
+        cell.set(operation: logArray[indexPath.row])
         return cell
     }
-    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
 
     /*
     // Override to support conditional editing of the table view.

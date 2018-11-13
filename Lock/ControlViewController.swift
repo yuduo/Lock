@@ -146,7 +146,21 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 }else if((byteArray[0] == 126)&&(byteArray[byteArray.count-1] == 126)){
                     
                 }else if((byteArray[0] == 255)&&(byteArray[byteArray.count-1] == 255)){
-                    
+                    if ((response[0]==126)&&(response[response.count-1]==126)){
+                        let m:[UInt8]=Array(response[10...26])
+                        var crc=m.crc16()
+                        let bytePtr = withUnsafePointer(to: &crc) {
+                            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                                UnsafeBufferPointer(start: $0, count: 2)
+                            }
+                        }
+                        let byteArray = Array(bytePtr)
+                        sendOpenLock(message: byteArray, for:characteristic)
+                        
+                    }else{
+                        response.removeAll()
+                        self.manager.cancelPeripheralConnection(self.peripheral!)
+                    }
                 }
                 else{
                     response+=byteArray[2...byteArray.count-1]
@@ -168,6 +182,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 }
                 let byteArray = Array(bytePtr)
                 sendOpenLock(message: byteArray, for:characteristic)
+                
             }
         }
     }
@@ -339,7 +354,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 loadSuccess()
                 LocationArray.removeAll()
                 let loc=Array(response[2...response.count-2])
-                for i in 0...count{
+                for i in 0..<count{
                     var location:Location!=Location()
                     var s:Int=Int(0+i*88)
                     var e:Int=Int(9+i*88)
