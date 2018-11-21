@@ -99,7 +99,7 @@ class ViewController: UIViewController {
         
         
         
-        switch client.connect(timeout: 30) {
+        switch client.connect(timeout: 20) {
         case .success:
             switch client.send(data:data ) {
             case .success:
@@ -110,7 +110,7 @@ class ViewController: UIViewController {
                     let response=Array(rdata[20...rdata.count-1])
                     if response[0] == 0x00{
                         //faild
-                        loadFaild()
+                        loadFaild("用户名或密码错误")
                     }else if response[0] == 0x03 ||  response[0] == 0x04{
                         loadSuccess()
                         if response.count > 4{

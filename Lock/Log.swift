@@ -41,11 +41,27 @@ class Log: NSObject {
         let db = try? Connection(dbPath)
         
         let ops = Table("operation")
-        //all
         
+        let Date_Time = Expression<Date>("Date_Time")
         switch type {
-        case "1":
+        case "1"://all
             try? db?.run(ops.delete())
+            break
+        case "2"://one month
+        
+            let startDate = Date()
+            let endDate = Calendar.current.date(byAdding: .day, value: -30, to: startDate)!
+            let query=ops.filter(startDate...endDate ~= Date_Time)
+            try? db?.run(query.delete())
+        
+            break
+        case "3":
+            let startDate = Date()
+            let endDate = Calendar.current.date(byAdding: .day, value: -60, to: startDate)!
+            let query=ops.filter(startDate...endDate ~= Date_Time)
+            try? db?.run(query.delete())
+            
+            break
         default:
             try? db?.run(ops.delete())
         }

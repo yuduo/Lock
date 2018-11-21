@@ -890,7 +890,7 @@
                                     <constraint firstAttribute="height" constant="74" id="Rpd-gd-xi5"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2gg-Bf-EJa">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2gg-Bf-EJa">
                                 <rect key="frame" x="53" y="316.5" width="269" height="34"/>
                                 <color key="backgroundColor" red="0.1624293913" green="0.44397261249999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -929,7 +929,7 @@
                             <constraint firstItem="Ymj-rg-uiv" firstAttribute="leading" secondItem="REr-IU-cAB" secondAttribute="leading" constant="29" id="ihv-Zw-yE0"/>
                             <constraint firstItem="2gg-Bf-EJa" firstAttribute="centerX" secondItem="cBn-eu-gcp" secondAttribute="centerX" id="pmk-dH-12Y"/>
                             <constraint firstItem="dlp-it-2rh" firstAttribute="top" secondItem="H6W-Fq-oDi" secondAttribute="bottom" constant="19" id="pwF-36-1D5"/>
-                            <constraint firstItem="2gg-Bf-EJa" firstAttribute="centerY" secondItem="cBn-eu-gcp" secondAttribute="centerY" id="uXU-vP-lPB"/>
+                            <constraint firstItem="2gg-Bf-EJa" firstAttribute="centerY" relation="greaterThanOrEqual" secondItem="cBn-eu-gcp" secondAttribute="centerY" id="uXU-vP-lPB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="REr-IU-cAB"/>
                     </view>

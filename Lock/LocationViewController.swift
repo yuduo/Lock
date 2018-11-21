@@ -16,7 +16,7 @@ class LocationViewController: UIViewController ,BMKMapViewDelegate,CLLocationMan
     var name:String=""
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title="地图方式"
         // Do any additional setup after loading the view.
         _mapView = BMKMapView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         self.view.addSubview(_mapView!)

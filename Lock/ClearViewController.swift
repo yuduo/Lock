@@ -36,7 +36,7 @@ class ClearViewController: UIViewController {
             self?.drop.setTitle(item, for: .normal)
         }
         dropDown.selectRow(at: 0)
-        self.drop.setTitle("一个月", for: .normal)
+        self.drop.setTitle("一个月前", for: .normal)
         log.text=String(Log.opCount())
         total.text=String(Log.opCount())
     }
@@ -55,7 +55,15 @@ class ClearViewController: UIViewController {
     }
     */
     @IBAction func OK(_ sender: Any) {
-        Log.clear("1")
+        let title=self.drop.titleLabel?.text
+        if title=="一个月前"{
+            Log.clear("2")
+        }else if title=="三个月前"{
+            Log.clear("3")
+        }else{
+            Log.clear("1")
+        }
+        
     }
     
     @IBAction func Cancel(_ sender: Any) {

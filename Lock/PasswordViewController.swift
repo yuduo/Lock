@@ -48,7 +48,7 @@ class PasswordViewController: UIViewController {
 
     @IBAction func ConfirmButtonClicked(_ sender: Any) {
         if (origin.text?.isEmpty)! || (newP.text?.isEmpty)! || (confirmP.text?.isEmpty)! || (self.phone.text?.isEmpty)!{
-            let alert = UIAlertController(title: "Alert", message: "不能为空", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "错误", message: "密码不能为空", preferredStyle: UIAlertControllerStyle.alert)
             let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
                 
                 // Code in this block will trigger when OK button tapped.
@@ -60,7 +60,7 @@ class PasswordViewController: UIViewController {
             return
         }
         if newP.text != confirmP.text{
-            let alert = UIAlertController(title: "Alert", message: "确认密码相同", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "错误", message: "确认密码相同", preferredStyle: UIAlertControllerStyle.alert)
             let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
                 
                 // Code in this block will trigger when OK button tapped.
@@ -118,7 +118,7 @@ class PasswordViewController: UIViewController {
                 let response=rdata[20]
                 if response == 0xFF{
                     //faild
-                    loadFaild()
+                    loadFaild("更新失败")
                 }else if response == 0x11{
                     let error = MessageView.viewFromNib(layout: .tabView)
                     error.configureTheme(.error)
@@ -133,7 +133,7 @@ class PasswordViewController: UIViewController {
             }
             
         case .failure(let error):
-            loadFaild()
+            loadFaild("发送失败")
             print(error)
         }
     }

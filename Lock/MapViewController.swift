@@ -43,7 +43,6 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         _mapView?.showsUserLocation = true
         //设置定位的状态为普通定位模式
         _mapView?.userTrackingMode = BMKUserTrackingModeNone
-        _mapView?.zoomLevel=10
         
     }
 
@@ -171,6 +170,9 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         //print("locations = \(locValue.latitude) \(locValue.longitude)")
         if (abs(location.latitude-locValue.latitude)>0.01 || abs(location.longitude-locValue.longitude)>0.01){
+           
+            
+            _mapView?.setRegion(BMKCoordinateRegionMake(location,BMKCoordinateSpanMake(0.3,0.3)), animated: true)
             queryLock(latitude:String(location.latitude) ,longitude:String(location.longitude))
             location.latitude=locValue.latitude
             location.longitude=locValue.longitude
@@ -245,10 +247,11 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                 
                 
             }else{
-                loadFaild()
+                loadFaild("数据错误")
             }
             
         case .failure(let error):
+            loadFaild("发送失败")
             print(error)
         }
         

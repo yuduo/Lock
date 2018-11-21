@@ -21,7 +21,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
     @IBOutlet weak var searchBar: UISearchBar!
     var LockArray:[Lock] = []
     
-    
+    var selected:Int=0
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,7 +52,10 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         print(searchText)
-        queryAll(str: searchText)
+        //queryAll(str: searchText)
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        queryAll(str: searchBar.text!)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -95,6 +98,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                 let lock:Lock=self.LockArray[indexPath.row]
                 self.location.latitude=Double(lock.latutude)!
                 self.location.longitude=Double(lock.longitude)!
+                self.selected=indexPath.row
                 self.performSegue(withIdentifier: "location", sender: nil)
             }
             
@@ -148,7 +152,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                     let response=Array(rdata[20...rdata.count-3])
                     if response[0] == 0x00{
                         //faild
-                        loadFaild()
+                        loadFaild("未查询到！")
                     }else {
                         loadSuccess()
                         print(response.count)
@@ -192,6 +196,8 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
         {
             if let destinationVC = segue.destination as? LocationViewController {
                 destinationVC.location = location
+                let lock:Lock=self.LockArray[self.selected]
+                destinationVC.name=lock.name
             }
         }
     }

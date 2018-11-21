@@ -147,15 +147,15 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                     
                 }else if((byteArray[0] == 255)&&(byteArray[byteArray.count-1] == 255)){
                     if ((response[0]==126)&&(response[response.count-1]==126)){
-                        let m:[UInt8]=Array(response[10...26])
-                        var crc=m.crc16()
-                        let bytePtr = withUnsafePointer(to: &crc) {
-                            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
-                                UnsafeBufferPointer(start: $0, count: 2)
-                            }
-                        }
-                        let byteArray = Array(bytePtr)
-                        sendOpenLock(message: byteArray, for:characteristic)
+//                        let m:[UInt8]=Array(response[10...26])
+//                        var crc=m.crc16()
+//                        let bytePtr = withUnsafePointer(to: &crc) {
+//                            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+//                                UnsafeBufferPointer(start: $0, count: 2)
+//                            }
+//                        }
+//                        let byteArray = Array(bytePtr)
+//                        sendOpenLock(message: byteArray, for:characteristic)
                         
                     }else{
                         response.removeAll()
@@ -192,6 +192,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             print(peripheral.name)
             
             if peripheral.name!.range(of:"iO") != nil{
+                Toast.show(message: "发现设备！", controller: self)
                 self.peripheral=peripheral
                 self.peripheral!.delegate=self
                 self.manager.connect(self.peripheral!, options: nil)
@@ -270,7 +271,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         
         Log.login(gUserName, "直连开锁")
         manager.scanForPeripherals(withServices: nil, options: nil)
-        
+        Toast.show(message: "搜索蓝牙！", controller: self)
         
         
     }
@@ -395,10 +396,11 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 
                 
             }else{
-                loadFaild()
+                loadFaild("查询失败")
             }
             
         case .failure(let error):
+            loadFaild("发送失败")
             print(error)
         }
         

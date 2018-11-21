@@ -52,7 +52,7 @@ class LogQueryViewController: UIViewController {
         dropButton.layer.cornerRadius = 5
         queryButton.layer.cornerRadius = 5
         
-        picker.datePickerMode=UIDatePickerMode.date
+        picker.datePickerMode=UIDatePickerMode.dateAndTime
         picker.isHidden=true
         
         let Tap = UITapGestureRecognizer(target: self, action: #selector(LogQueryViewController.Tap))
@@ -151,6 +151,7 @@ class LogQueryViewController: UIViewController {
             chooseView.isHidden=true
             dropButton.isHidden=false
             downView.isHidden=false
+            picker.isHidden=true
         }
     }
     @IBAction func pickerAction(_ sender: Any) {
