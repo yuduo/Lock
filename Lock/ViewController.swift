@@ -17,7 +17,8 @@ let client = TCPClient(address:
     server.NMSAdrres,
                        
                        port: Int32(server.NMSPort)!)
-
+var gUserName=""
+var gDateFormat="yyyy-MM-dd HH:mm:ss"
 class ViewController: UIViewController {
 
     @IBOutlet weak var eyeButton: UIButton!
@@ -27,16 +28,20 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        userName.text="pm8"
-        password.text="m"
+        userName.text=Log.User()
+        //password.text="m"
         loginButton.layer.cornerRadius=5
         eyeButton.setBackgroundImage(UIImage(named: "闭眼"), for: UIControl.State.normal)
         eyeButton.tag=1
         password.isSecureTextEntry = true
-        
+        let Tap = UITapGestureRecognizer(target: self, action: #selector(ViewController.Tap))
+        self.view.addGestureRecognizer(Tap)
+    }
+    @objc func Tap(sender:UITapGestureRecognizer) {
+        userName.resignFirstResponder()
+        password.resignFirstResponder()
         
     }
-
     @IBAction func eyeClicked(_ sender: Any) {
         
         if eyeButton.tag == 1{
@@ -119,14 +124,17 @@ class ViewController: UIViewController {
                             user.UserID=u
                             user.UserPassWd=p
                             if !_time.isEmpty{
+                                let formatter = DateFormatter()
+                                
+                                
                                 user.Flash_Date=String(bytes:_time,encoding:.utf8)!
                             }
                             user.UserType=String(response[0])
                             Log.User(user: user)
                         }
-                        
+                        gUserName=u
                         Log.login(u, "正常登录")
-                        Socket.uploadLog(content: "登录", target: "pm8")
+                        Socket.uploadLog(content: "登录", target: u)
                         performSegue(withIdentifier: "loginSegue", sender: nil)
                     }else {
                         
@@ -143,6 +151,7 @@ class ViewController: UIViewController {
             //check local
             if Log.User(username: u, password: p){
                 Log.login(u, "离线登录")
+                gUserName=u
                 performSegue(withIdentifier: "loginSegue", sender: nil)
             }
             print("connect faild")

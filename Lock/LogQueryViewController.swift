@@ -66,7 +66,7 @@ class LogQueryViewController: UIViewController {
         self.view.addGestureRecognizer(Tap)
         
         let dateFormatter : DateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MMM-dd"
+        dateFormatter.dateFormat = gDateFormat
         let date = Date()
         let dateString = dateFormatter.string(from: date)
         startLabel.text=dateString
@@ -112,9 +112,12 @@ class LogQueryViewController: UIViewController {
     @IBAction func queryButtonClicked(_ sender: Any) {
         if(segment.selectedSegmentIndex == 0){
             //by time
-            
+            logArray.removeAll()
+            logArray=Log.getLog(startLabel.text!,endLabel.text!)
         }else{
             //search by user
+            logArray.removeAll()
+            logArray=Log.getLog((dropButton.titleLabel?.text)!)
         }
         performSegue(withIdentifier: "logList", sender: nil)
         //let alice = users.filter(id == rowid)//查询
@@ -153,7 +156,7 @@ class LogQueryViewController: UIViewController {
     @IBAction func pickerAction(_ sender: Any) {
         let dateFormatter = DateFormatter()
         
-        dateFormatter.dateFormat = "dd-MM-yyyy"
+        dateFormatter.dateFormat = gDateFormat
         
         let strDate = dateFormatter.string(from: picker.date)
         if type==1{

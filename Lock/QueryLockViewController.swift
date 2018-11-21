@@ -87,12 +87,22 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
        
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if LockArray.count > indexPath.row{
-            let lock:Lock=LockArray[indexPath.row]
-            location.latitude=Double(lock.latutude)!
-            location.longitude=Double(lock.longitude)!
-            performSegue(withIdentifier: "location", sender: nil)
+        
+        let alert = UIAlertController(title: "", message: "导航到锁设备位置？", preferredStyle: UIAlertControllerStyle.alert)
+        let OKAction = UIAlertAction(title: "导航", style: .default) { (action:UIAlertAction!) in
+            
+            if self.LockArray.count > indexPath.row{
+                let lock:Lock=self.LockArray[indexPath.row]
+                self.location.latitude=Double(lock.latutude)!
+                self.location.longitude=Double(lock.longitude)!
+                self.performSegue(withIdentifier: "location", sender: nil)
+            }
+            
         }
+        alert.addAction(OKAction)
+        alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        
     }
     func updateSearchResults(for searchController: UISearchController) {
         self.tableview.reloadData()

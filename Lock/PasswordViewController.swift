@@ -71,10 +71,10 @@ class PasswordViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        let username="pm8"
+        let username=gUserName
         let password=self.newP.text!
         let phone=self.phone.text!
-        let name="test"
+        let name=gUserName
         let type:[UInt8]=[0x01]
         var _userName:[UInt8]=Array(username.utf8)
         var _password:[UInt8]=Array(password.utf8)
@@ -106,7 +106,7 @@ class PasswordViewController: UIViewController {
         let data = Data(bytes: [0x7e, 0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x16,0x62,0xff]+message+byteArray+[0x7e])
         
         
-        
+        Log.login(gUserName, "修改密码")
         switch client.send(data:data ) {
         case .success:
             sleep(1)
@@ -126,13 +126,14 @@ class PasswordViewController: UIViewController {
                     
                     
                 }else{
-                    loadSuccess()
+                    Toast.show(message: "修改成功！", controller: self)
                 }
                 
                 
             }
             
         case .failure(let error):
+            loadFaild()
             print(error)
         }
     }

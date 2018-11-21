@@ -19,7 +19,7 @@ class Log: NSObject {
         let Date_Time = Expression<String?>("Date_Time")
         let Operation_Record = Expression<String>("Operation_Record")
         let dateFormatter : DateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = gDateFormat
         let date = Date()
         let dateString = dateFormatter.string(from: date)
         let insert = ops.insert(User_Account <- user, Date_Time <- dateString, Operation_Record <- record)
@@ -77,7 +77,62 @@ class Log: NSObject {
         }
         return logArray
     }
-    
+    class func getLog(_ start:String,_ end:String)->[Operation]{
+        var logArray:[Operation] = []
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
+        
+        let ops = Table("operation")
+        let User_Account = Expression<String>("User_Account")
+        let Date_Time = Expression<Date?>("Date_Time")
+        let Date_str = Expression<String>("Date_Time")
+        let Operation_Record = Expression<String>("Operation_Record")
+        let dateFormatter : DateFormatter = DateFormatter()
+        dateFormatter.dateFormat = gDateFormat
+        let startDate=dateFormatter.date(from: start)
+        let endDate=dateFormatter.date(from: end)
+        let query=ops.filter(startDate!...endDate! ~= Date_Time)
+        for ope in (try! db?.prepare(query))! {
+            if ope[Operation_Record].isEmpty{
+                continue
+            }
+            //print("id: \(ope[Operation_Record]), name: \(ope[User_Account]), email: \(ope[Date_Time])")
+            
+            var op:Operation=Operation()
+            op.User_Account=ope[User_Account]
+            op.Date_Time=ope[Date_str]
+            op.Operation_Record=ope[Operation_Record]
+            logArray.append(op)
+        }
+        return logArray
+    }
+    class func getLog(_ name:String)->[Operation]{
+        var logArray:[Operation] = []
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
+        
+        let ops = Table("operation")
+        let User_Account = Expression<String>("User_Account")
+        let Date_Time = Expression<String>("Date_Time")
+        let Operation_Record = Expression<String>("Operation_Record")
+        
+        let query=ops.filter(name == User_Account)
+        for ope in (try! db?.prepare(query))! {
+            if ope[Operation_Record].isEmpty{
+                continue
+            }
+            print("id: \(ope[Operation_Record]), name: \(ope[User_Account]), email: \(ope[Date_Time])")
+            
+            var op:Operation=Operation()
+            op.User_Account=ope[User_Account]
+            op.Date_Time=ope[Date_Time]
+            op.Operation_Record=ope[Operation_Record]
+            logArray.append(op)
+        }
+        return logArray
+    }
     class func lock(locks:String){
         if locks.count == 0{
             return
@@ -123,7 +178,23 @@ class Log: NSObject {
         }
         return false;
     }
+    class func User()->String{
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
         
+        let users = Table("user")
+        let UserID = Expression<String?>("UserID")
+        let id = Expression<Int?>("id")
+        let query = users.select(UserID)           // SELECT "email" FROM "users"
+            .order(id.desc) // ORDER BY "email" DESC, "name"
+            .limit(1)     // LIMIT 5 OFFSET 1
+        for user in try! (db?.prepare(query))! {
+            return user[UserID] ?? ""
+        }
+        
+        return ""
+    }
     class func server(_ adress:String,_ port:String,_ scope:String){
         let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
         print(dbPath)

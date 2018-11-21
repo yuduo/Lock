@@ -14,6 +14,8 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
     var _mapView: BMKMapView?
     let locationManager = CLLocationManager()
     var LocationArray:[Location] = []
+    var location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title="地图方式"
@@ -34,15 +36,14 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
             locationManager.startUpdatingLocation()
         }
         
-        queryLock(latitude: "120.665441",longitude: "31.2043183");
-        let location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
-        _mapView?.setCenter(location, animated: true)
+        //queryLock(latitude: "120.665441",longitude: "31.2043183");
+         _mapView?.setCenter(location, animated: true)
         
         //显示定位图层
         _mapView?.showsUserLocation = true
         //设置定位的状态为普通定位模式
         _mapView?.userTrackingMode = BMKUserTrackingModeNone
-        
+        _mapView?.zoomLevel=10
         
     }
 
@@ -66,7 +67,10 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         _mapView?.viewWillAppear()
         _mapView?.delegate = self  // 此处记得不用的时候需要置nil，否则影响内存的释放
     }
-    
+//    override func viewDidAppear(_ animated: Bool) {
+//        queryLock(latitude:String(location.latitude) ,longitude:String(location.longitude))
+//
+//    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         _mapView?.viewWillDisappear()
@@ -166,10 +170,14 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         //print("locations = \(locValue.latitude) \(locValue.longitude)")
-        
+        if (abs(location.latitude-locValue.latitude)>0.01 || abs(location.longitude-locValue.longitude)>0.01){
+            queryLock(latitude:String(location.latitude) ,longitude:String(location.longitude))
+            location.latitude=locValue.latitude
+            location.longitude=locValue.longitude
+        }
     }
     
-    func queryLock(latitude:String,longitude:String){
+    private func queryLock(latitude:String,longitude:String){
         var message:[UInt8]=[]
         var _latitude:[UInt8]=Array(latitude.utf8)
         var _longitude:[UInt8]=Array(longitude.utf8)
@@ -181,7 +189,7 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         for _ in _longitude.count..<10{
             _longitude.append(0x00)
         }
-        let rang="0.0100"
+        let rang="0.1000"
         message=_latitude+_longitude+Array(rang.utf8)
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x06,0x62,0xff]+message
         
@@ -209,6 +217,9 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
                 let response=Array(rdata[20...rdata.count-3])
                 
                     loadSuccess()
+                    if response.count < 4{
+                        return
+                    }
                     let loc=Array(response[2...response.count-2])
                     for i in 0..<count{
                         var location:Location!=Location()

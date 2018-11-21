@@ -38,8 +38,8 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             locationManager.startUpdatingLocation()
         }
         
-        label.isHidden=true
-        drop.isHidden=true
+//        label.isHidden=true
+//        drop.isHidden=true
   
         dropDown.anchorView = drop // UIView or UIBarButtonItem
         dropDown.bottomOffset = CGPoint(x: 0, y: drop.bounds.height)
@@ -48,8 +48,8 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         drop.layer.borderColor = UIColor.blue.cgColor
         drop.layer.cornerRadius = 5
         
-        let Tap = UITapGestureRecognizer(target: self, action: #selector(LogQueryViewController.Tap))
-        self.view.addGestureRecognizer(Tap)
+//        let Tap = UITapGestureRecognizer(target: self, action: #selector(LogQueryViewController.Tap))
+//        self.view.addGestureRecognizer(Tap)
         
         
         manager = CBCentralManager(delegate: self, queue: nil ,options:nil)
@@ -191,7 +191,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         if let peripheralName = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
             print(peripheral.name)
             
-            if peripheral.name!.range(of:"iODS775") != nil{
+            if peripheral.name!.range(of:"iO") != nil{
                 self.peripheral=peripheral
                 self.peripheral!.delegate=self
                 self.manager.connect(self.peripheral!, options: nil)
@@ -245,10 +245,10 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         Toast.show(message: "开锁成功！", controller: self)
     }
     override func viewDidAppear(_ animated: Bool) {
-        //queryLock(latitude:String(currentLocation.latitude) ,longitude:String(currentLocation.longitude))
-        queryLock(latitude:"120.665441" ,longitude:"31.2043183")
-        label.isHidden=true
-        drop.isHidden=true
+        queryLock(latitude:String(currentLocation.latitude) ,longitude:String(currentLocation.longitude))
+        //queryLock(latitude:"120.665441" ,longitude:"31.2043183")
+//        label.isHidden=true
+//        drop.isHidden=true
         dropDown.hide()
     }
     @objc func Tap(sender:UITapGestureRecognizer) {
@@ -268,7 +268,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     
     @IBAction func directClicked(_ sender: Any) {
         
-        
+        Log.login(gUserName, "直连开锁")
         manager.scanForPeripherals(withServices: nil, options: nil)
         
         
@@ -276,6 +276,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     }
     
     @IBAction func helpClicked(_ sender: Any) {
+        Log.login(gUserName, "求助开锁")
         dropDown.dataSource = getLocks()
         dropDown.show()
         label.isHidden=false
@@ -288,6 +289,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     }
     
     @IBAction func remoteClicked(_ sender: Any) {
+        Log.login(gUserName, "远程开锁")
         dropDown.dataSource = getLocks()
         dropDown.show()
         label.isHidden=false
@@ -302,13 +304,19 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         print("locations = \(locValue.latitude) \(locValue.longitude)")
-        currentLocation.latitude=locValue.latitude
-        currentLocation.longitude=locValue.longitude
+        if ((abs(currentLocation.latitude-locValue.latitude)>0.01) || (abs(currentLocation.longitude-locValue.longitude)>0.01)){
+            queryLock(latitude:String(currentLocation.latitude) ,longitude:String(currentLocation.longitude))
+            //queryLock(latitude: "113.3", longitude: "40.1")
+            currentLocation.latitude=locValue.latitude
+            currentLocation.longitude=locValue.longitude
+        }
+        
     }
-    func queryLock(latitude:String,longitude:String){
+    private func queryLock(latitude:String,longitude:String){
+        
         var message:[UInt8]=[]
-        var _latitude:[UInt8]=Array(latitude.utf8)
-        var _longitude:[UInt8]=Array(longitude.utf8)
+        var _latitude:[UInt8]=Array(latitude.prefix(5).utf8)
+        var _longitude:[UInt8]=Array(longitude.prefix(5).utf8)
         
         if _latitude.count > 10{
             _latitude=Array(latitude.prefix(10).utf8)
@@ -323,7 +331,8 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             _longitude.append(0x00)
         }
         let rang="0.0100"
-        message=_latitude+_longitude+Array(rang.utf8)
+        message=_latitude+_longitude+[0x30 ,0x2e ,0x30 ,0x31 ,0x31 ,0x00]//Array(rang.utf8)
+        //message=[0x31 ,0x31 ,0x33 ,0x2e ,0x33 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x34 ,0x30 ,0x2e ,0x31 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x30 ,0x2e ,0x30 ,0x31 ,0x31 ,0x00]
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x06,0x62,0xff]+message
         
         var crc=m.crc16()
@@ -407,5 +416,8 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         let backItem = UIBarButtonItem()
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
+    }
+    @IBAction func dropClicked(_ sender: Any) {
+        dropDown.show()
     }
 }

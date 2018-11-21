@@ -30,7 +30,7 @@ class ClearViewController: UIViewController {
         dropDown.anchorView = drop // UIView or UIBarButtonItem
         dropDown.bottomOffset = CGPoint(x: 0, y: drop.bounds.height)
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = ["一个月","三个月","全部"]
+        dropDown.dataSource = ["一个月前","三个月前","一年以前"]
         // Action triggered on selection
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.drop.setTitle(item, for: .normal)
@@ -38,6 +38,7 @@ class ClearViewController: UIViewController {
         dropDown.selectRow(at: 0)
         self.drop.setTitle("一个月", for: .normal)
         log.text=String(Log.opCount())
+        total.text=String(Log.opCount())
     }
     
     @IBAction func dropClicked(_ sender: Any) {

@@ -11,7 +11,7 @@ import CryptoSwift
 import SwiftSocket
 class Socket: NSObject {
     static func uploadLog(content:String,target:String) {
-        let username="pm8"
+        let username=gUserName
         
         var _userName:[UInt8]=Array(username.utf8)
         let _content:[UInt8]=Array(content.utf8)
@@ -60,7 +60,7 @@ class Socket: NSObject {
     }
     
     class func openLock(longitude:String,latutude:String,lockId:String, controller: UIViewController){
-        let username="pm8"
+        let username=gUserName
         var _userName:[UInt8]=Array(username.utf8)
         
         for _ in _userName.count..<16{
@@ -107,7 +107,7 @@ class Socket: NSObject {
     }
     
     class func openLock(lockId:String, controller: UIViewController){
-        let username="pm8"
+        let username=gUserName
         var _userName:[UInt8]=Array(username.utf8)
         
         for _ in _userName.count..<16{
