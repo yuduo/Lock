@@ -49,15 +49,15 @@ class Log: NSObject {
             break
         case "2"://one month
         
-            let startDate = Date()
-            let endDate = Calendar.current.date(byAdding: .day, value: -30, to: startDate)!
+            let endDate = Date()
+            let startDate = Calendar.current.date(byAdding: .day, value: -30, to: endDate)!
             let query=ops.filter(startDate...endDate ~= Date_Time)
             try? db?.run(query.delete())
         
             break
         case "3":
-            let startDate = Date()
-            let endDate = Calendar.current.date(byAdding: .day, value: -60, to: startDate)!
+            let endDate = Date()
+            let startDate = Calendar.current.date(byAdding: .day, value: -60, to: endDate)!
             let query=ops.filter(startDate...endDate ~= Date_Time)
             try? db?.run(query.delete())
             
@@ -176,8 +176,8 @@ class Log: NSObject {
         let UserPassWd = Expression<String?>("UserPassWd")
         let Flash_Date = Expression<String?>("Flash_Date")
         let Last_Tag = Expression<Int?>("Last_Tag")
-        try? db?.run(ops.insert(or: .replace, UserID <- user.UserID, UserType <- user.UserType, UserPassWd <- user.UserPassWd,Flash_Date <- user.Flash_Date,Last_Tag <- user.Last_Tag))
-        
+        //try? db?.run(ops.insert(or: .replace, UserID <- user.UserID, UserType <- user.UserType, UserPassWd <- user.UserPassWd,Flash_Date <- user.Flash_Date,Last_Tag <- user.Last_Tag))
+        try? db?.run(ops.insert(UserID <- user.UserID, UserType <- user.UserType, UserPassWd <- user.UserPassWd,Flash_Date <- user.Flash_Date,Last_Tag <- user.Last_Tag))
     }
     class func User(username:String,password:String)->Bool{
         let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
@@ -204,7 +204,7 @@ class Log: NSObject {
         let id = Expression<Int?>("id")
         let query = users.select(UserID)           // SELECT "email" FROM "users"
             .order(id.desc) // ORDER BY "email" DESC, "name"
-            .limit(1)     // LIMIT 5 OFFSET 1
+            .limit(5)     // LIMIT 5 OFFSET 1
         for user in try! (db?.prepare(query))! {
             return user[UserID] ?? ""
         }

@@ -48,7 +48,20 @@ class PasswordViewController: UIViewController {
 
     @IBAction func ConfirmButtonClicked(_ sender: Any) {
         if (origin.text?.isEmpty)! || (newP.text?.isEmpty)! || (confirmP.text?.isEmpty)! || (self.phone.text?.isEmpty)!{
-            let alert = UIAlertController(title: "错误", message: "密码不能为空", preferredStyle: UIAlertControllerStyle.alert)
+            var message=""
+            if ((self.phone.text?.isEmpty)!){
+                message="手机号码不能为空"
+            }
+            if ((confirmP.text?.isEmpty)!){
+                message="确认密码不能为空"
+            }
+            if (newP.text?.isEmpty)!{
+                message="新密码不能为空"
+            }
+            if (origin.text?.isEmpty)!{
+                message="原密码不能为空"
+            }
+            let alert = UIAlertController(title: "错误", message: message, preferredStyle: UIAlertControllerStyle.alert)
             let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
                 
                 // Code in this block will trigger when OK button tapped.

@@ -14,7 +14,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     
     var manager: CBCentralManager!
     var peripheral:CBPeripheral?
-    
+    var _characteristic: CBCharacteristic?
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var drop: UIButton!
     let locationManager = CLLocationManager()
@@ -22,6 +22,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     var currentLocation:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
     let dropDown = DropDown()
     var response:[UInt8]=[]
+    var isConnected=false
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -76,12 +77,13 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         _ central: CBCentralManager,
         didConnect peripheral: CBPeripheral) {
         self.peripheral!.discoverServices(nil)
+        isConnected=true
     }
     func centralManager(
         _ central: CBCentralManager,
         didFailToConnect peripheral: CBPeripheral,
         error: Error?) {
-        
+        isConnected=false
         
     }
     func peripheral(
@@ -137,6 +139,11 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         
         if characteristic.uuid == CBUUID(string: "FFE1") {
             print(characteristic.value ?? "no value")
+            if characteristic.value?.count ?? 0 == 1{
+                response.removeAll()
+                self.manager.cancelPeripheralConnection(self.peripheral!)
+                return
+            }
             if characteristic.value?.count ?? 0 > 7{
                 guard let characteristicData = characteristic.value else { return }
                 let byteArray = [UInt8](characteristicData)
@@ -146,21 +153,36 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 }else if((byteArray[0] == 126)&&(byteArray[byteArray.count-1] == 126)){
                     
                 }else if((byteArray[0] == 255)&&(byteArray[byteArray.count-1] == 255)){
-                    if ((response[0]==126)&&(response[response.count-1]==126)){
-//                        let m:[UInt8]=Array(response[10...26])
-//                        var crc=m.crc16()
-//                        let bytePtr = withUnsafePointer(to: &crc) {
-//                            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
-//                                UnsafeBufferPointer(start: $0, count: 2)
+                    if response.count > 0{
+                        if ((response[0]==126)&&(response[response.count-1]==126)){
+//                            let alert = UIAlertController(title: "", message: "是否开锁？", preferredStyle: UIAlertControllerStyle.alert)
+//                            let OKAction = UIAlertAction(title: "是", style: .default) { (action:UIAlertAction!) in
+//                                let m:[UInt8]=Array(self.response[10...26])
+//                                var crc=m.crc16()
+//                                let bytePtr = withUnsafePointer(to: &crc) {
+//                                    $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+//                                        UnsafeBufferPointer(start: $0, count: 2)
+//                                    }
+//                                }
+//                                let byteArray = Array(bytePtr)
+//                                self.sendOpenLock(message: byteArray, for:characteristic)
+//
+//                                // Code in this block will trigger when OK button tapped.
+//                                print("Ok button tapped");
+//
 //                            }
-//                        }
-//                        let byteArray = Array(bytePtr)
-//                        sendOpenLock(message: byteArray, for:characteristic)
-                        
-                    }else{
-                        response.removeAll()
-                        self.manager.cancelPeripheralConnection(self.peripheral!)
+//                            alert.addAction(OKAction)
+//                            alert.addAction(UIAlertAction(title: "否", style: UIAlertActionStyle.cancel, handler: nil))
+//                            self.present(alert, animated: true, completion: nil)
+//                            return
+//                        }else{
+                            response.removeAll()
+                            self.manager.cancelPeripheralConnection(self.peripheral!)
+                            return
+                        }
                     }
+                    
+                    
                 }
                 else{
                     response+=byteArray[2...byteArray.count-1]
@@ -171,19 +193,22 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 for element in byteArray {
                     print(element, terminator: "")
                 }
-            }
-            if ((response.count > 20)&&(response[response.count-1]==126)){
-                let m:[UInt8]=Array(response[10...26])
-                var crc=m.crc16()
-                let bytePtr = withUnsafePointer(to: &crc) {
-                    $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
-                        UnsafeBufferPointer(start: $0, count: 2)
-                    }
-                }
-                let byteArray = Array(bytePtr)
-                sendOpenLock(message: byteArray, for:characteristic)
                 
+                if ((response.count > 20)&&(response[response.count-1]==126)){
+                    let m:[UInt8]=Array(response[10...26])
+                    var crc=m.crc16()
+                    let bytePtr = withUnsafePointer(to: &crc) {
+                        $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                            UnsafeBufferPointer(start: $0, count: 2)
+                        }
+                    }
+                    let byteArray = Array(bytePtr)
+                    _characteristic=characteristic
+                    sendOpenLock(message: byteArray, for:characteristic)
+                    
+                }
             }
+            
         }
     }
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -197,8 +222,14 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 self.peripheral!.delegate=self
                 self.manager.connect(self.peripheral!, options: nil)
                 self.manager.stopScan()
+                
             }
         }
+    }
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        //
+        isConnected=false
+        
     }
     private func sendReadID()->Data{
         let m:[UInt8]=[0x00,0x10, 0x01,0x00,0x01,0x00,0x02,0x61,0xff]
@@ -244,6 +275,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         let data = Data(bytes: [0x7e, 0x00,0x10, 0x01,0x00,0x01,0x00,0x01,0x61,0xff]+message+byteArray+[0x7e])
         self.peripheral!.writeValue(data, for: characteristic, type: .withoutResponse)
         Toast.show(message: "开锁成功！", controller: self)
+        
     }
     override func viewDidAppear(_ animated: Bool) {
         queryLock(latitude:String(currentLocation.latitude) ,longitude:String(currentLocation.longitude))
@@ -270,8 +302,31 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     @IBAction func directClicked(_ sender: Any) {
         
         Log.login(gUserName, "直连开锁")
-        manager.scanForPeripherals(withServices: nil, options: nil)
-        Toast.show(message: "搜索蓝牙！", controller: self)
+        
+        if isConnected{
+//            if ((response.count > 20)&&(response[response.count-1]==126)){
+//                let m:[UInt8]=Array(response[10...26])
+//                var crc=m.crc16()
+//                let bytePtr = withUnsafePointer(to: &crc) {
+//                    $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+//                        UnsafeBufferPointer(start: $0, count: 2)
+//                    }
+//                }
+//                let byteArray = Array(bytePtr)
+//
+//                sendOpenLock(message: byteArray, for:_characteristic!)
+//
+//            }
+            
+            Toast.show(message: "断开蓝牙！", controller: self)
+            response.removeAll()
+            self.manager.cancelPeripheralConnection(self.peripheral!)
+        }else{
+            manager.scanForPeripherals(withServices: nil, options: nil)
+            Toast.show(message: "搜索蓝牙！", controller: self)
+            
+        }
+        
         
         
     }

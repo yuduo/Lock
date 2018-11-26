@@ -161,18 +161,29 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                         LockArray.removeAll()
                         //let count:Int=Int((size+1)*70+1)
                        // if  count==response.count{
-                            for i in 0...size{
-                                var lock:Lock!=Lock()
-                                let lon=locks[0...9]
-                                let lan=locks[10...19]
-                                let name=locks[20...69]
-                                lock.longitude=String(data: Data(bytes:lon), encoding: String.Encoding.utf8)!
-                                lock.latutude=String(data: Data(bytes:lan), encoding: String.Encoding.utf8)!
-                                lock.name=String(data: Data(bytes:name), encoding: String.Encoding.utf8)!
-                                LockArray.append(lock)
-                           // }
+                        var s:Int=0
+                        var e:Int=9
+                        for _ in 0..<size{
+                                var loc:Lock!=Lock()
+                                //s=Int(i*70)
+                                e=s+9//Int(9+i*70)
+                                let lon=locks[s...e]
+                                loc.longitude=String(bytes:lon, encoding: String.Encoding.ascii)!
+                                s=e+1//Int(10+i*70)
+                                e=s+9//Int(19+i*70)
+                                let lan=locks[s...e]
+                                loc.latutude=String(bytes:lan, encoding: String.Encoding.ascii)!
+                                s=e+1//Int(20+i*70)
+                                e=s+49//Int(69+i*70)
+                                let name=locks[s...e]
+                            
+                            
+                                loc.name=String(bytes:name, encoding: String.Encoding.ascii)!
+                                self.LockArray.append(loc)
+                                s=e+1
+                            }
                            self.tableview.reloadData()
-                        }
+                        //}
                         
                     }
                     

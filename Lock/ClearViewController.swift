@@ -63,7 +63,7 @@ class ClearViewController: UIViewController {
         }else{
             Log.clear("1")
         }
-        
+        Toast.show(message: "数据清除成功", controller: self)
     }
     
     @IBAction func Cancel(_ sender: Any) {
