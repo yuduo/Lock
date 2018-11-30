@@ -12,7 +12,9 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var tableview: UITableView!
     @IBOutlet weak var quitButton: UIButton!
-    let rowArray=["使用与帮助","反馈信息","版本更新"]
+    let rowArray=["使用与帮助",
+                  //"反馈信息",
+                  "版本更新"]
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title="使用帮助"
@@ -39,7 +41,7 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell     {
@@ -56,8 +58,8 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
         case 0:
             performSegue(withIdentifier: "about", sender: nil)
         case 1:
-            performSegue(withIdentifier: "feedback", sender: nil)
-        case 2:
+//            performSegue(withIdentifier: "feedback", sender: nil)
+//        case 2:
             //
             let url=URL(string: "https://itunes.apple.com/id382165332")
             if #available(iOS 10.0, *) {

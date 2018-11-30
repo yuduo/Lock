@@ -24,7 +24,7 @@ class LogTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     func set(operation:Operation){
-        self.timeLabel.text=operation.Date_Time
+        self.timeLabel.text=operation.Date_Time.replacingOccurrences(of: "T", with: " ")
         self.targetLabel.text=operation.User_Account
         self.opeLabel.text=operation.Operation_Record
     }

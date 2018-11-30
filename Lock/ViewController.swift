@@ -19,12 +19,14 @@ let client = TCPClient(address:
                        port: Int32(server.NMSPort)!)
 var gUserName=""
 var gDateFormat="yyyy-MM-dd HH:mm:ss"
+var offLine=false
 class ViewController: UIViewController {
 
     @IBOutlet weak var eyeButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var userName: UITextField!
     @IBOutlet weak var password: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -99,7 +101,7 @@ class ViewController: UIViewController {
         
         
         
-        switch client.connect(timeout: 20) {
+        switch client.connect(timeout: 10) {
         case .success:
             switch client.send(data:data ) {
             case .success:
@@ -148,18 +150,23 @@ class ViewController: UIViewController {
             }
             break
         case .failure(let error):
+            Toast.show(message: "离线登录", controller: self)
+            //loadFaild("离线登录")
             //check local
             if Log.User(username: u, password: p){
+                offLine=true
                 Log.login(u, "离线登录")
                 gUserName=u
-                performSegue(withIdentifier: "loginSegue", sender: nil)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                }
+                
             }
             print("connect faild")
             break
         }
         
     }
-    
     
 }
 

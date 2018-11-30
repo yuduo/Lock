@@ -210,7 +210,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="23" translatesAutoresizingMaskIntoConstraints="NO" id="Bqf-4V-R9n">
                                         <rect key="frame" x="0.0" y="141" width="343" height="125"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6j7-Lt-6wd">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6j7-Lt-6wd">
                                                 <rect key="frame" x="0.0" y="0.0" width="160" height="125"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="160" id="kwh-sU-MNU"/>
@@ -218,7 +218,7 @@
                                                 </constraints>
                                                 <state key="normal" backgroundImage="工单管理"/>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RGb-xA-7rV">
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RGb-xA-7rV">
                                                 <rect key="frame" x="183" y="0.0" width="160" height="125"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="160" id="bkO-nB-grX"/>
@@ -759,35 +759,43 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" placeholder="请简单描述一下，您在使用本软件过程中遇到的问题，方便我们后期的修正与改进，谢谢~" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xlB-Mj-U1r">
-                                <rect key="frame" x="0.0" y="66" width="375" height="601"/>
+                                <rect key="frame" x="0.0" y="128" width="375" height="539"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="CjB-2v-3TM">
-                                <rect key="frame" x="0.0" y="66" width="375" height="601"/>
+                                <rect key="frame" x="0.0" y="128" width="375" height="539"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <string key="text">亨通智能门禁终端管理具备门禁钥匙以及相关管理和工程施工功能，它是光交门禁的开锁“钥匙"，也是工程施工的数据采集和记录器，同时给终端管理用户提供一定的网络管理权限的延伸。
-其“门禁控制"模块提供无钥匙门禁开锁能力。
-“工程施工"模块提供门禁锁设备新建、维护、移机和拆除的施工功能。
-“群组管理"模块给终端管理用户提供用户管理、工程审查和远程开锁能力。
-“终端管理"模块则提供当前用户的密码修改、当前终端设备的软件使用日志查询、网络配置、数据清理以及使用帮助等功能。
-注:  由于软件需调用百度地图功能，为便于导航和地图显示，请安装百度地图软件。
-</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M41-8p-XV4">
+                                <rect key="frame" x="68" y="84" width="238" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="dropClicked:" destination="G6w-0N-Y3O" eventType="touchUpInside" id="1Ld-f3-xjC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="CjB-2v-3TM" firstAttribute="trailing" secondItem="DgV-fv-ckK" secondAttribute="trailing" id="6M5-IQ-eOT"/>
                             <constraint firstItem="CjB-2v-3TM" firstAttribute="bottom" secondItem="DgV-fv-ckK" secondAttribute="bottom" id="bCn-63-y6d"/>
-                            <constraint firstItem="CjB-2v-3TM" firstAttribute="top" secondItem="DgV-fv-ckK" secondAttribute="top" constant="2" id="jb1-Xy-4IL"/>
+                            <constraint firstItem="CjB-2v-3TM" firstAttribute="top" secondItem="DgV-fv-ckK" secondAttribute="top" constant="64" id="jb1-Xy-4IL"/>
                             <constraint firstItem="CjB-2v-3TM" firstAttribute="leading" secondItem="DgV-fv-ckK" secondAttribute="leading" id="qeT-vC-2wY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="DgV-fv-ckK"/>
                     </view>
+                    <connections>
+                        <outlet property="drop" destination="M41-8p-XV4" id="ElY-Sy-xBR"/>
+                        <outlet property="textview" destination="CjB-2v-3TM" id="tjl-06-oPl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hjC-kN-UJO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -987,7 +995,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TrK-y1-Xxl">
-                                            <rect key="frame" x="100" y="8" width="174" height="21"/>
+                                            <rect key="frame" x="100" y="8" width="259" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -1024,7 +1032,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gcc-wB-YoR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4371" y="-480"/>
+            <point key="canvasLocation" x="4370.3999999999996" y="-480.80959520239884"/>
         </scene>
         <!--Control View Controller-->
         <scene sceneID="4wi-2J-gL4">
@@ -1278,7 +1286,7 @@
     </scenes>
     <resources>
         <image name="下拉" width="48" height="48"/>
-        <image name="亨通logo" width="682" height="465"/>
+        <image name="亨通logo" width="511.5" height="348.75"/>
         <image name="地图方式" width="355" height="355"/>
         <image name="工单管理" width="552" height="469"/>
         <image name="求助开锁" width="355" height="355"/>

@@ -23,6 +23,9 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     let dropDown = DropDown()
     var response:[UInt8]=[]
     var isConnected=false
+    var peripheralArray:[CBPeripheral]=[]
+    let peripheralDropDown = DropDown()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,11 +52,19 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         drop.layer.borderColor = UIColor.blue.cgColor
         drop.layer.cornerRadius = 5
         
+        peripheralDropDown.anchorView = drop // UIView or UIBarButtonItem
+        peripheralDropDown.bottomOffset = CGPoint(x: 0, y: drop.bounds.height)
+        peripheralDropDown.hide()
+        peripheralDropDown.layer.borderWidth=1
+        peripheralDropDown.layer.borderColor = UIColor.blue.cgColor
+        peripheralDropDown.layer.cornerRadius = 5
+        
 //        let Tap = UITapGestureRecognizer(target: self, action: #selector(LogQueryViewController.Tap))
 //        self.view.addGestureRecognizer(Tap)
         
         
         manager = CBCentralManager(delegate: self, queue: nil ,options:nil)
+        
     }
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
@@ -78,6 +89,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         didConnect peripheral: CBPeripheral) {
         self.peripheral!.discoverServices(nil)
         isConnected=true
+        Toast.show(message: "连接成功！", controller: self)
     }
     func centralManager(
         _ central: CBCentralManager,
@@ -114,6 +126,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                     for: thisCharacteristic
                 )
                 self.peripheral!.writeValue(sendReadID(), for: characteristic, type: .withoutResponse)
+                Toast.show(message: "发送数据！", controller: self)
             }
             if characteristic.properties.contains(.write) {
                 print("\(characteristic.uuid): properties contains .write")
@@ -195,6 +208,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 }
                 
                 if ((response.count > 20)&&(response[response.count-1]==126)){
+                    Toast.show(message: "请求开锁！", controller: self)
                     let m:[UInt8]=Array(response[10...26])
                     var crc=m.crc16()
                     let bytePtr = withUnsafePointer(to: &crc) {
@@ -218,11 +232,20 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             
             if peripheral.name!.range(of:"iO") != nil{
                 Toast.show(message: "发现设备！", controller: self)
-                self.peripheral=peripheral
-                self.peripheral!.delegate=self
-                self.manager.connect(self.peripheral!, options: nil)
-                self.manager.stopScan()
+
+                peripheralArray.append(peripheral)
                 
+                peripheralDropDown.dataSource = getPeripherals()
+                peripheralDropDown.show()
+                // Action triggered on selection
+                peripheralDropDown.selectionAction = { [weak self] (index, item) in
+                    self?.peripheralDropDown.hide()
+                    self?.peripheral=self!.peripheralArray[index]
+                    self?.peripheral!.delegate=self
+                    self?.manager.connect((self?.peripheral!)!, options: nil)
+                    self?.manager.stopScan()
+                    
+                }
             }
         }
     }
@@ -278,11 +301,16 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         
     }
     override func viewDidAppear(_ animated: Bool) {
-        queryLock(latitude:String(currentLocation.latitude) ,longitude:String(currentLocation.longitude))
+        super.viewDidAppear(animated)
+        //queryLock(latitude:String(currentLocation.latitude) ,longitude:String(currentLocation.longitude))
         //queryLock(latitude:"120.665441" ,longitude:"31.2043183")
 //        label.isHidden=true
 //        drop.isHidden=true
         dropDown.hide()
+        
+        if offLine{
+            
+        }
     }
     @objc func Tap(sender:UITapGestureRecognizer) {
         label.isHidden=true
@@ -301,7 +329,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     
     @IBAction func directClicked(_ sender: Any) {
         
-        Log.login(gUserName, "直连开锁")
+        Log.login(gUserName, "直联开锁")
         
         if isConnected{
 //            if ((response.count > 20)&&(response[response.count-1]==126)){
@@ -322,6 +350,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             response.removeAll()
             self.manager.cancelPeripheralConnection(self.peripheral!)
         }else{
+            peripheralArray.removeAll()
             manager.scanForPeripherals(withServices: nil, options: nil)
             Toast.show(message: "搜索蓝牙！", controller: self)
             
@@ -361,18 +390,18 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         print("locations = \(locValue.latitude) \(locValue.longitude)")
         if ((abs(currentLocation.latitude-locValue.latitude)>0.01) || (abs(currentLocation.longitude-locValue.longitude)>0.01)){
-            queryLock(latitude:String(currentLocation.latitude) ,longitude:String(currentLocation.longitude))
-            //queryLock(latitude: "113.3", longitude: "40.1")
             currentLocation.latitude=locValue.latitude
             currentLocation.longitude=locValue.longitude
+            translate(locValue.longitude,locValue.latitude)
+            
         }
         
     }
     private func queryLock(latitude:String,longitude:String){
         
         var message:[UInt8]=[]
-        var _latitude:[UInt8]=Array(latitude.prefix(5).utf8)
-        var _longitude:[UInt8]=Array(longitude.prefix(5).utf8)
+        var _latitude:[UInt8]=Array(latitude.prefix(10).utf8)
+        var _longitude:[UInt8]=Array(longitude.prefix(10).utf8)
         
         if _latitude.count > 10{
             _latitude=Array(latitude.prefix(10).utf8)
@@ -386,8 +415,8 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         for _ in _longitude.count..<10{
             _longitude.append(0x00)
         }
-        let rang="0.0100"
-        message=_latitude+_longitude+[0x30 ,0x2e ,0x30 ,0x31 ,0x31 ,0x00]//Array(rang.utf8)
+        let rang="1.1000"
+        message=_latitude+_longitude+Array(rang.utf8)
         //message=[0x31 ,0x31 ,0x33 ,0x2e ,0x33 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x34 ,0x30 ,0x2e ,0x31 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x30 ,0x2e ,0x30 ,0x31 ,0x31 ,0x00]
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x06,0x62,0xff]+message
         
@@ -468,7 +497,13 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         }
         return list
     }
-    
+    func getPeripherals()->[String]{
+        var list:[String]=[]
+        for peripheral in peripheralArray{
+            list.append(peripheral.name!)
+        }
+        return list
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let backItem = UIBarButtonItem()
         backItem.title = ""
@@ -476,5 +511,43 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     }
     @IBAction func dropClicked(_ sender: Any) {
         dropDown.show()
+    }
+    private func translate(_ longitude:Double,_ latitude:Double){
+        //var url=String(format: "http://api.map.baidu.com/ag/coord/convert?from=0&to=2&x=%f&y=%f",longitude,latitude)
+        
+        let url = URL(string: String(format: "http://api.map.baidu.com/ag/coord/convert?from=0&to=2&x=%f&y=%f",longitude,latitude))!
+        var request = URLRequest(url: url)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        //let postString = String(format: "from=0&to=2&x=%f&y=%f",longitude,latitude)
+        //request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+                
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(responseString)")
+            let jsonResult: NSDictionary = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+            let er=jsonResult["error"] as! Int
+            if (er == 0){
+                let x=jsonResult["x"] as! String
+                let y=jsonResult["y"] as! String
+                print(x.base64Decoded())
+                print(y.base64Decoded())
+                self.currentLocation.latitude=Double(y.base64Decoded())!
+                self.currentLocation.longitude=Double(x.base64Decoded())!
+                self.queryLock(latitude:String(self.currentLocation.latitude) ,longitude:String(self.currentLocation.longitude))
+            }
+            
+        }
+        task.resume()
     }
 }

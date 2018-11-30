@@ -41,6 +41,8 @@
 		B6AB0A1D217F239300136B2F /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB0A1C217F239300136B2F /* AboutViewController.swift */; };
 		B6AB0A1F2188461300136B2F /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB0A1E2188461200136B2F /* LocationViewController.swift */; };
 		B6AB0A212189799A00136B2F /* ControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB0A202189799A00136B2F /* ControlViewController.swift */; };
+		B6CA61C321AF900700740C84 /* StringEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CA61C221AF900700740C84 /* StringEx.swift */; };
+		B6CA61C521B1079400740C84 /* DateEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CA61C421B1079400740C84 /* DateEx.swift */; };
 		B6E3AF7321951C3800FEC68E /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E3AF7221951C3800FEC68E /* Toast.swift */; };
 		B6E3AF752195946E00FEC68E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E3AF742195946D00FEC68E /* MainViewController.swift */; };
 /* End PBXBuildFile section */
@@ -85,6 +87,8 @@
 		B6AB0A1C217F239300136B2F /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		B6AB0A1E2188461200136B2F /* LocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		B6AB0A202189799A00136B2F /* ControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlViewController.swift; sourceTree = "<group>"; };
+		B6CA61C221AF900700740C84 /* StringEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringEx.swift; sourceTree = "<group>"; };
+		B6CA61C421B1079400740C84 /* DateEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateEx.swift; sourceTree = "<group>"; };
 		B6E3AF7221951C3800FEC68E /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		B6E3AF742195946D00FEC68E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -154,8 +158,10 @@
 				B69EC39021707C9700692188 /* LogTableViewController.swift */,
 				B69EC39221707CB800692188 /* LogQueryViewController.swift */,
 				B69EC3AC2179B0C000692188 /* Log.swift */,
+				B6CA61C421B1079400740C84 /* DateEx.swift */,
 				B69EC39721708BFC00692188 /* Utility.swift */,
 				B69EC3AA21796D1500692188 /* Socket.swift */,
+				B6CA61C221AF900700740C84 /* StringEx.swift */,
 				B69EC39E217495A000692188 /* QueryLockViewController.swift */,
 				B69EC3A22175E8C800692188 /* InfoPlist.strings */,
 				B69EC3A62178709500692188 /* PasswordViewController.swift */,
@@ -355,7 +361,9 @@
 				B69EC39321707CB800692188 /* LogQueryViewController.swift in Sources */,
 				B69EC3A921788EB000692188 /* MessageBox.swift in Sources */,
 				B6AB0A1B217F230500136B2F /* FeedbackViewController.swift in Sources */,
+				B6CA61C321AF900700740C84 /* StringEx.swift in Sources */,
 				B6AB0A1F2188461300136B2F /* LocationViewController.swift in Sources */,
+				B6CA61C521B1079400740C84 /* DateEx.swift in Sources */,
 				B6AB0A17217F1BE500136B2F /* ClearViewController.swift in Sources */,
 				B69EC3AB21796D1500692188 /* Socket.swift in Sources */,
 				B6E3AF7321951C3800FEC68E /* Toast.swift in Sources */,

@@ -171,9 +171,8 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         //print("locations = \(locValue.latitude) \(locValue.longitude)")
         if (abs(location.latitude-locValue.latitude)>0.01 || abs(location.longitude-locValue.longitude)>0.01){
            
+            translate(locValue.longitude,locValue.latitude)
             
-            _mapView?.setRegion(BMKCoordinateRegionMake(location,BMKCoordinateSpanMake(0.3,0.3)), animated: true)
-            queryLock(latitude:String(location.latitude) ,longitude:String(location.longitude))
             location.latitude=locValue.latitude
             location.longitude=locValue.longitude
         }
@@ -184,7 +183,12 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         var _latitude:[UInt8]=Array(latitude.utf8)
         var _longitude:[UInt8]=Array(longitude.utf8)
         
-        
+        if _latitude.count > 10{
+            _latitude=Array(latitude.prefix(10).utf8)
+        }
+        if _longitude.count > 10{
+            _longitude=Array(longitude.prefix(10).utf8)
+        }
         for _ in _latitude.count..<10{
             _latitude.append(0x00)
         }
@@ -270,5 +274,43 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         
     }
     
-    
+    private func translate(_ longitude:Double,_ latitude:Double){
+        //var url=String(format: "http://api.map.baidu.com/ag/coord/convert?from=0&to=2&x=%f&y=%f",longitude,latitude)
+        
+        let url = URL(string: String(format: "http://api.map.baidu.com/ag/coord/convert?from=0&to=2&x=%f&y=%f",longitude,latitude))!
+        var request = URLRequest(url: url)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        //let postString = String(format: "from=0&to=2&x=%f&y=%f",longitude,latitude)
+        //request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+                
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(responseString)")
+            let jsonResult: NSDictionary = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+            let er=jsonResult["error"] as! Int
+            if (er == 0){
+                let x=jsonResult["x"] as! String
+                let y=jsonResult["y"] as! String
+                print(x.base64Decoded())
+                print(y.base64Decoded())
+                self.location.latitude=Double(y.base64Decoded())!
+                self.location.longitude=Double(x.base64Decoded())!
+                self._mapView?.setRegion(BMKCoordinateRegionMake(self.location,BMKCoordinateSpanMake(0.001,0.001)), animated: true)
+                self.queryLock(latitude:String(self.location.latitude) ,longitude:String(self.location.longitude))
+            }
+            
+        }
+        task.resume()
+    }
 }

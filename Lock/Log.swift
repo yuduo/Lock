@@ -16,13 +16,13 @@ class Log: NSObject {
         
         let ops = Table("operation")
         let User_Account = Expression<String?>("User_Account")
-        let Date_Time = Expression<String?>("Date_Time")
+        let Date_Time = Expression<Date>("Date_Time")
         let Operation_Record = Expression<String>("Operation_Record")
         let dateFormatter : DateFormatter = DateFormatter()
         dateFormatter.dateFormat = gDateFormat
         let date = Date()
-        let dateString = dateFormatter.string(from: date)
-        let insert = ops.insert(User_Account <- user, Date_Time <- dateString, Operation_Record <- record)
+        //let dateString = dateFormatter.string(from: date)
+        let insert = ops.insert(User_Account <- user, Date_Time <- date, Operation_Record <- record)
         let rowid = try? db?.run(insert)
         
     }
@@ -101,14 +101,18 @@ class Log: NSObject {
         
         let ops = Table("operation")
         let User_Account = Expression<String>("User_Account")
-        let Date_Time = Expression<Date?>("Date_Time")
+        let Date_Time = Expression<Date>("Date_Time")
         let Date_str = Expression<String>("Date_Time")
         let Operation_Record = Expression<String>("Operation_Record")
         let dateFormatter : DateFormatter = DateFormatter()
-        dateFormatter.dateFormat = gDateFormat
+        
+        //dateFormatter.locale=Locale(identifier:"Asia/Shanghai")
+        //dateFormatter.timeZone=TimeZone(identifier:"Asia/Shanghai")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let startDate=dateFormatter.date(from: start)
         let endDate=dateFormatter.date(from: end)
-        let query=ops.filter(startDate!...endDate! ~= Date_Time)
+
+        let query=ops.filter(startDate!.toLocalTime()...endDate!.toLocalTime() ~= Date_Time)
         for ope in (try! db?.prepare(query))! {
             if ope[Operation_Record].isEmpty{
                 continue

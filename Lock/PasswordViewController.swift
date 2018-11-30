@@ -49,9 +49,9 @@ class PasswordViewController: UIViewController {
     @IBAction func ConfirmButtonClicked(_ sender: Any) {
         if (origin.text?.isEmpty)! || (newP.text?.isEmpty)! || (confirmP.text?.isEmpty)! || (self.phone.text?.isEmpty)!{
             var message=""
-            if ((self.phone.text?.isEmpty)!){
-                message="手机号码不能为空"
-            }
+//            if ((self.phone.text?.isEmpty)!){
+//                message="手机号码不能为空"
+//            }
             if ((confirmP.text?.isEmpty)!){
                 message="确认密码不能为空"
             }
@@ -86,7 +86,10 @@ class PasswordViewController: UIViewController {
         }
         let username=gUserName
         let password=self.newP.text!
-        let phone=self.phone.text!
+        var phone=self.phone.text!
+        if (phone.count != 11) {
+            phone=""
+        }
         let name=gUserName
         let type:[UInt8]=[0x01]
         var _userName:[UInt8]=Array(username.utf8)

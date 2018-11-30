@@ -111,7 +111,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
     func updateSearchResults(for searchController: UISearchController) {
         self.tableview.reloadData()
     }
-    func queryAll(str:String){
+    private func queryAll(str:String){
         var message:[UInt8]=[]
         if (str.count > 0){
             message = Array(str.utf8)
@@ -149,7 +149,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                 if rdata[0] == 0x7e
                 {
                     
-                    let response=Array(rdata[20...rdata.count-3])
+                    let response=Array(rdata[20...rdata.count-1])
                     if response[0] == 0x00{
                         //faild
                         loadFaild("未查询到！")
@@ -157,30 +157,44 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                         loadSuccess()
                         print(response.count)
                         let size=response[0]
-                        let locks=Array(response[1...response.count-1])
+                        let locks=(rdata[21...rdata.count-3])
                         LockArray.removeAll()
                         //let count:Int=Int((size+1)*70+1)
                        // if  count==response.count{
-                        var s:Int=0
-                        var e:Int=9
-                        for _ in 0..<size{
+                        var s:Int=0+21
+                        var e:Int=9+21
+                        for i in 0..<18{
                                 var loc:Lock!=Lock()
                                 //s=Int(i*70)
                                 e=s+9//Int(9+i*70)
-                                let lon=locks[s...e]
-                                loc.longitude=String(bytes:lon, encoding: String.Encoding.ascii)!
+                                let lon=(locks[s...e])
+                                loc.longitude=String(data: Data(bytes:lon), encoding: String.Encoding.utf8) ?? ""
+                            print(s)
+                            print(e)
+                            print(String(data: Data(bytes:lon), encoding: String.Encoding.utf8))
                                 s=e+1//Int(10+i*70)
                                 e=s+9//Int(19+i*70)
-                                let lan=locks[s...e]
-                                loc.latutude=String(bytes:lan, encoding: String.Encoding.ascii)!
+                                let lan=(locks[s...e])
+                                loc.latutude=String(data: Data(bytes:lan), encoding: String.Encoding.utf8) ?? ""
+                            print(s)
+                            print(e)
+                            print(String(data: Data(bytes:lan), encoding: String.Encoding.utf8))
                                 s=e+1//Int(20+i*70)
                                 e=s+49//Int(69+i*70)
-                                let name=locks[s...e]
+                                let name=(locks[s...e])
                             
                             
-                                loc.name=String(bytes:name, encoding: String.Encoding.ascii)!
+                                loc.name=String(data: Data(bytes:name), encoding: String.Encoding.utf8) ?? ""
+                            print(s)
+                            print(e)
+                            print(String(data: Data(bytes:name), encoding: String.Encoding.utf8))
                                 self.LockArray.append(loc)
                                 s=e+1
+                                print(loc.longitude)
+                                print(loc.latutude)
+                                print(loc.name)
+                            //break
+                            
                             }
                            self.tableview.reloadData()
                         //}
