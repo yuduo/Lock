@@ -311,9 +311,9 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         if offLine{
             
         }else{
-            //check()
+            
         }
-        
+        check()
         
     }
     @objc func Tap(sender:UITapGestureRecognizer) {
@@ -577,11 +577,28 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             let responseString = String(data: data, encoding: .utf8)
             print("responseString = \(responseString)")
             let jsonResult: NSDictionary = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-            let er=jsonResult["error"] as! Int
-            if (er == 0){
-                let verCode=jsonResult["verCode"] as! Int
-                //let url=jsonResult["url"] as! String
-                
+            
+            let verCode=jsonResult["verCode"] as! Float
+            //let url=jsonResult["url"] as! String
+            let Version = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+            //let build = dictionary["CFBundleVersion"] as! String
+            if (verCode - Float(Version)! > 0) {
+                let alert = UIAlertController(title: "有新版本", message: "是否更新？", preferredStyle: UIAlertControllerStyle.alert)
+                let OKAction = UIAlertAction(title: "是", style: .default) { (action:UIAlertAction!) in
+                    
+                    // Code in this block will trigger when OK button tapped.
+                    print("Ok button tapped");
+                    
+                }
+                alert.addAction(OKAction)
+                let cancelAction = UIAlertAction(title: "否", style: .default) { (action:UIAlertAction!) in
+                    
+                    // Code in this block will trigger when OK button tapped.
+                    print("cancelAction button tapped");
+                    
+                }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
             }
             
         }
