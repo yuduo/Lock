@@ -310,7 +310,11 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         
         if offLine{
             
+        }else{
+            //check()
         }
+        
+        
     }
     @objc func Tap(sender:UITapGestureRecognizer) {
         label.isHidden=true
@@ -437,7 +441,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             sleep(1)
             guard let rdata = client.read(1024*10) else { return }
             let cdata = Array(rdata[20...21])
-            let count:Int16=Int16((UInt16(cdata[1]) << 8) + UInt16(cdata[0]))
+            let count:Int16=Int16((UInt8(cdata[1]) << 8) + UInt8(cdata[0]))
             if rdata[0] == 0x7e
             {
                 
@@ -545,6 +549,39 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 self.currentLocation.latitude=Double(y.base64Decoded())!
                 self.currentLocation.longitude=Double(x.base64Decoded())!
                 self.queryLock(latitude:String(self.currentLocation.latitude) ,longitude:String(self.currentLocation.longitude))
+            }
+            
+        }
+        task.resume()
+    }
+    private func check(){
+
+        let url = URL(string:"http://47.99.47.199:8080/iODS_Lock/AndroidApp/ver.json")//URL(string: String(format: "http://%s:%s/iODS_Lock/AndroidApp/ver.json","server.NMSAdrres","server.NMSPort"))
+        var request = URLRequest(url: url!)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "GET"
+        //let postString = String(format: "from=0&to=2&x=%f&y=%f",longitude,latitude)
+        //request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+                
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(responseString)")
+            let jsonResult: NSDictionary = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+            let er=jsonResult["error"] as! Int
+            if (er == 0){
+                let verCode=jsonResult["verCode"] as! Int
+                //let url=jsonResult["url"] as! String
+                
             }
             
         }

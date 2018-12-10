@@ -111,6 +111,21 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
     func updateSearchResults(for searchController: UISearchController) {
         self.tableview.reloadData()
     }
+    private func sendLockNext(byte:UInt8)->Data{
+        let message:[UInt8]=[byte]
+        let m:[UInt8]=[0x00,0x10, 0x01,0x00,0x01,0x00,0x02,0x62,0x6c]+message
+        
+        var crc=m.crc16()
+        
+        let bytePtr = withUnsafePointer(to: &crc) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                UnsafeBufferPointer(start: $0, count: 2)
+            }
+        }
+        let byteArray = Array(bytePtr)
+        let data = Data(bytes: [0x7e, 0x00,0x10, 0x01,0x00,0x01,0x00,0x02,0x62,0x6c]+message+byteArray+[0x7e])
+        return data
+    }
     private func queryAll(str:String){
         var message:[UInt8]=[]
         if (str.count > 0){
@@ -145,7 +160,28 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
             switch client.send(data:data ) {
             case .success:
                 sleep(1)
-                guard let rdata = client.read(1024*10) else { return }
+                var rdata:[Byte]=[]
+                var i:Int=0
+                while true{
+                    guard let r = client.read(1024*10) else { break }
+                    if (r[3] != r[5]){
+                        print(r[3])
+                        print(r[5])
+                        if i == 0 {
+                            rdata+=r[0...r.count-4]
+                        }else{
+                            rdata+=r[20...r.count-4]
+                        }
+                        i+=1
+                        //client.send(data:data )
+                    }else{
+                        break
+                    }
+                }
+                if rdata.count == 0{
+                    return
+                }
+                
                 if rdata[0] == 0x7e
                 {
                     
@@ -156,14 +192,33 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                     }else {
                         loadSuccess()
                         print(response.count)
+                        
                         let size=response[0]
-                        let locks=(rdata[21...rdata.count-3])
+                        var locks=(rdata[21...rdata.count-3])
+                        var ind=locks.firstIndex(of:0x7E)
+                        //for i in 0...22{
+                        var rang=ind!-2...ind!+20
+                        locks.removeSubrange(rang)
+                        //}
+                        ind=locks.firstIndex(of:0x7E)
+                        rang=ind!-2...ind!+20
+                        locks.removeSubrange(rang)
+                        ind=locks.firstIndex(of:0x7E)
+                        rang=ind!-2...ind!+20
+                        locks.removeSubrange(rang)
+//                        for i in 0...22{
+//                            locks.remove(at: ind!-2)
+//                        }
+//                        ind=locks.firstIndex(of:0x7E)
+//                        for i in 0...22{
+//                            locks.remove(at: ind!-2)
+//                        }
                         LockArray.removeAll()
                         //let count:Int=Int((size+1)*70+1)
                        // if  count==response.count{
                         var s:Int=0+21
                         var e:Int=9+21
-                        for i in 0..<18{
+                        for i in 0..<size-1{
                                 var loc:Lock!=Lock()
                                 //s=Int(i*70)
                                 e=s+9//Int(9+i*70)
@@ -193,7 +248,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                                 print(loc.longitude)
                                 print(loc.latutude)
                                 print(loc.name)
-                            //break
+                            
                             
                             }
                            self.tableview.reloadData()

@@ -101,7 +101,7 @@ class ViewController: UIViewController {
         
         
         
-        switch client.connect(timeout: 10) {
+        switch client.connect(timeout: 20) {
         case .success:
             switch client.send(data:data ) {
             case .success:

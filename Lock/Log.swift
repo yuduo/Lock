@@ -22,7 +22,7 @@ class Log: NSObject {
         dateFormatter.dateFormat = gDateFormat
         let date = Date()
         //let dateString = dateFormatter.string(from: date)
-        let insert = ops.insert(User_Account <- user, Date_Time <- date, Operation_Record <- record)
+        let insert = ops.insert(User_Account <- user, Date_Time <- date.toLocalTime(), Operation_Record <- record)
         let rowid = try? db?.run(insert)
         
     }
@@ -49,16 +49,16 @@ class Log: NSObject {
             break
         case "2"://one month
         
-            let endDate = Date()
-            let startDate = Calendar.current.date(byAdding: .day, value: -30, to: endDate)!
-            let query=ops.filter(startDate...endDate ~= Date_Time)
+            let endDate = Date().toLocalTime()
+            let startDate = Calendar.current.date(byAdding: .day, value: -30, to: endDate)?.toLocalTime()
+            let query=ops.filter(startDate!...endDate ~= Date_Time)
             try? db?.run(query.delete())
         
             break
         case "3":
-            let endDate = Date()
-            let startDate = Calendar.current.date(byAdding: .day, value: -60, to: endDate)!
-            let query=ops.filter(startDate...endDate ~= Date_Time)
+            let endDate = Date().toLocalTime()
+            let startDate = Calendar.current.date(byAdding: .day, value: -60, to: endDate)?.toLocalTime()
+            let query=ops.filter(startDate!...endDate ~= Date_Time)
             try? db?.run(query.delete())
             
             break

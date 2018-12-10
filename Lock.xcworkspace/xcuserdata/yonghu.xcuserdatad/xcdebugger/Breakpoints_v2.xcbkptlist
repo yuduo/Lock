@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lock/ControlViewController.swift"
-            timestampString = "565250107.065782"
+            timestampString = "566126026.033474"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "450"
-            endingLineNumber = "450"
-            landmarkName = "queryLock(latitude:longitude:)"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
+            landmarkName = "check()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
