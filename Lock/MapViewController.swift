@@ -171,10 +171,22 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         //print("locations = \(locValue.latitude) \(locValue.longitude)")
         if (abs(location.latitude-locValue.latitude)>0.01 || abs(location.longitude-locValue.longitude)>0.01){
            
-            translate(locValue.longitude,locValue.latitude)
+            //translate(locValue.longitude,locValue.latitude)
             
             location.latitude=locValue.latitude
             location.longitude=locValue.longitude
+            
+            // 国测局坐标类型的原始坐标
+            let gcj02Coord:CLLocationCoordinate2D  = CLLocationCoordinate2DMake(locValue.latitude, locValue.longitude)
+            // 转为百度经纬度类型的坐标
+            let bd09Coord:CLLocationCoordinate2D  = BMKCoordTrans(gcj02Coord, BMK_COORD_TYPE(rawValue: 0)!, BMK_COORD_TYPE(rawValue: 2)!)
+            self._mapView?.setRegion(BMKCoordinateRegionMake(bd09Coord,BMKCoordinateSpanMake(0.001,0.001)), animated: true)
+            let loc:BMKUserLocation=BMKUserLocation()
+            
+            let cl:CLLocation=CLLocation(latitude: bd09Coord.latitude, longitude: bd09Coord.longitude)
+            loc.location=cl
+            self._mapView?.updateLocationData(loc)
+            self.queryLock(latitude:String(bd09Coord.latitude) ,longitude:String(bd09Coord.longitude))
         }
     }
     
@@ -195,8 +207,8 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         for _ in _longitude.count..<10{
             _longitude.append(0x00)
         }
-        let rang="0.1000"
-        message=_latitude+_longitude+Array(rang.utf8)
+        let rang="0.0100"
+        message=_longitude+_latitude+Array(rang.utf8)
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x06,0x62,0xff]+message
         
         var crc=m.crc16()

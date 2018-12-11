@@ -147,6 +147,7 @@
                         <outlet property="password" destination="7xe-4m-Jzn" id="Cjb-hs-pQx"/>
                         <outlet property="userName" destination="oKB-Me-J7u" id="pSS-vh-NAd"/>
                         <segue destination="Hyx-SO-XQy" kind="show" identifier="loginSegue" id="74g-vJ-433"/>
+                        <segue destination="seE-QY-AfI" kind="show" identifier="direct" id="APd-5I-vff"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -505,6 +506,7 @@
                             <outlet property="delegate" destination="pED-kj-3fE" id="vvL-uy-dci"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="oPk-pO-XCE"/>
                     <connections>
                         <segue destination="uqZ-Aw-oB7" kind="show" identifier="log" id="OUC-TE-Gfg"/>
                         <segue destination="IMI-Fh-243" kind="show" identifier="password" id="d64-1e-0fG"/>
@@ -1283,10 +1285,26 @@
             </objects>
             <point key="canvasLocation" x="4403" y="926"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="fDj-Qo-dHi">
+            <objects>
+                <navigationController id="seE-QY-AfI" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Rcp-X2-6Qu">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="pED-kj-3fE" kind="relationship" relationship="rootViewController" id="gby-lr-GsD"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kRF-f1-An6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="700" y="-690"/>
+        </scene>
     </scenes>
     <resources>
         <image name="下拉" width="48" height="48"/>
-        <image name="亨通logo" width="511.5" height="348.75"/>
+        <image name="亨通logo" width="682" height="465"/>
         <image name="地图方式" width="355" height="355"/>
         <image name="工单管理" width="552" height="469"/>
         <image name="求助开锁" width="355" height="355"/>
@@ -1302,4 +1320,7 @@
         <image name="门禁控制" width="552" height="469"/>
         <image name="闭眼" width="64" height="64"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="gby-lr-GsD"/>
+    </inferredMetricsTieBreakers>
 </document>

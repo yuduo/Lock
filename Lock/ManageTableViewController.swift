@@ -11,6 +11,7 @@ import UIKit
 class ManageTableViewController: UITableViewController {
     internal var cellArray:[String] = ["日志查询","网络配置","数据清除","修改密码","使用帮助","当前版本"]
     let strArray:[String]=["日志","网络","数据","修改","使用帮助","火箭"]
+    var disable=false
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,6 +24,7 @@ class ManageTableViewController: UITableViewController {
         
         //self.tableView.register(UINib(nibName: "ManageTableViewCell", bundle: nil), forCellReuseIdentifier: "ManageTableViewCell")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        disable=gDirect
     }
 
     // MARK: - Table view data source
@@ -51,7 +53,14 @@ class ManageTableViewController: UITableViewController {
         cell.imageView?.image!.draw(in: imageRect)
         cell.imageView?.image! = UIGraphicsGetImageFromCurrentImageContext()!;
         UIGraphicsEndImageContext();
-        
+        if disable{
+            if indexPath.section == 0 || indexPath.section == 2 || indexPath.section == 3{
+                cell.isUserInteractionEnabled = false;
+                cell.textLabel?.isEnabled = false;
+                cell.detailTextLabel?.isEnabled = false;
+            }
+            
+        }
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

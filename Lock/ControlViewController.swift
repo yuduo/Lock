@@ -10,6 +10,7 @@ import UIKit
 import DropDown
 
 import CoreBluetooth
+
 class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentralManagerDelegate ,CBPeripheralDelegate{
     
     var manager: CBCentralManager!
@@ -25,7 +26,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     var isConnected=false
     var peripheralArray:[CBPeripheral]=[]
     let peripheralDropDown = DropDown()
-    
+    var bd09Coord:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) )
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -313,7 +314,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         }else{
             
         }
-        check()
+        
         
     }
     @objc func Tap(sender:UITapGestureRecognizer) {
@@ -373,7 +374,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         // Action triggered on selection
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.drop.setTitle(item, for: .normal)
-            Socket.openLock(longitude: String(format:"%f",(self?.currentLocation.longitude)!),latutude: String(format:"%f",(self?.currentLocation.latitude)!),lockId: (self?.LocationArray[index].id)!,controller:self!)
+            Socket.openLock(longitude: String(format:"%f",(self?.bd09Coord.longitude)!),latutude: String(format:"%f",(self?.bd09Coord.latitude)!),lockId: (self?.LocationArray[index].id)!,controller:self!)
         }
     }
     
@@ -396,8 +397,14 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         if ((abs(currentLocation.latitude-locValue.latitude)>0.01) || (abs(currentLocation.longitude-locValue.longitude)>0.01)){
             currentLocation.latitude=locValue.latitude
             currentLocation.longitude=locValue.longitude
-            translate(locValue.longitude,locValue.latitude)
-            
+            //translate(locValue.longitude,locValue.latitude)
+            // 国测局坐标类型的原始坐标
+            let gcj02Coord:CLLocationCoordinate2D  = CLLocationCoordinate2DMake(locValue.latitude, locValue.longitude)
+            // 转为百度经纬度类型的坐标
+            bd09Coord = BMKCoordTrans(gcj02Coord, BMK_COORD_TYPE(rawValue: 0)!, BMK_COORD_TYPE(rawValue: 2)!)
+            //self.currentLocation.latitude=bd09Coord.latitude
+            //self.currentLocation.longitude=bd09Coord.longitude
+            self.queryLock(latitude:String(bd09Coord.latitude) ,longitude:String(bd09Coord.longitude))
         }
         
     }
@@ -419,8 +426,8 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         for _ in _longitude.count..<10{
             _longitude.append(0x00)
         }
-        let rang="1.1000"
-        message=_latitude+_longitude+Array(rang.utf8)
+        let rang="0.0100"
+        message=_longitude+_latitude+Array(rang.utf8)
         //message=[0x31 ,0x31 ,0x33 ,0x2e ,0x33 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x34 ,0x30 ,0x2e ,0x31 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0x30 ,0x2e ,0x30 ,0x31 ,0x31 ,0x00]
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x06,0x62,0xff]+message
         
@@ -482,6 +489,10 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 
                 
                 
+                dropDown.dataSource = getLocks()
+                if dropDown.dataSource.count > 0{
+                    self.drop.setTitle(dropDown.dataSource[0], for: .normal)
+                }
                 
             }else{
                 loadFaild("查询失败")
@@ -554,54 +565,5 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         }
         task.resume()
     }
-    private func check(){
-
-        let url = URL(string:"http://47.99.47.199:8080/iODS_Lock/AndroidApp/ver.json")//URL(string: String(format: "http://%s:%s/iODS_Lock/AndroidApp/ver.json","server.NMSAdrres","server.NMSPort"))
-        var request = URLRequest(url: url!)
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "GET"
-        //let postString = String(format: "from=0&to=2&x=%f&y=%f",longitude,latitude)
-        //request.httpBody = postString.data(using: .utf8)
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {                                                 // check for fundamental networking error
-                print("error=\(error)")
-                return
-            }
-            
-            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
-                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                print("response = \(response)")
-                
-            }
-            
-            let responseString = String(data: data, encoding: .utf8)
-            print("responseString = \(responseString)")
-            let jsonResult: NSDictionary = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-            
-            let verCode=jsonResult["verCode"] as! Float
-            //let url=jsonResult["url"] as! String
-            let Version = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
-            //let build = dictionary["CFBundleVersion"] as! String
-            if (verCode - Float(Version)! > 0) {
-                let alert = UIAlertController(title: "有新版本", message: "是否更新？", preferredStyle: UIAlertControllerStyle.alert)
-                let OKAction = UIAlertAction(title: "是", style: .default) { (action:UIAlertAction!) in
-                    
-                    // Code in this block will trigger when OK button tapped.
-                    print("Ok button tapped");
-                    
-                }
-                alert.addAction(OKAction)
-                let cancelAction = UIAlertAction(title: "否", style: .default) { (action:UIAlertAction!) in
-                    
-                    // Code in this block will trigger when OK button tapped.
-                    print("cancelAction button tapped");
-                    
-                }
-                alert.addAction(cancelAction)
-                self.present(alert, animated: true, completion: nil)
-            }
-            
-        }
-        task.resume()
-    }
+    
 }

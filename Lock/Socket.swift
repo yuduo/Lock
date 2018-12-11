@@ -59,14 +59,23 @@ class Socket: NSObject {
     
     }
     
-    class func openLock(longitude:String,latutude:String,lockId:String, controller: UIViewController){
+    class func openLock(longitude:String,latitude:String,lockId:String, controller: UIViewController){
         let username=gUserName
         var _userName:[UInt8]=Array(username.utf8)
-        
+        var _latitude:[UInt8]=Array(latitude.prefix(10).utf8)
+        var _longitude:[UInt8]=Array(longitude.prefix(10).utf8)
         for _ in _userName.count..<16{
             _userName.append(0x00)
         }
-        let message=Array(longitude.utf8)+Array(latutude.utf8)+_userName+Array(lockId.utf8)
+        for _ in _latitude.count..<10{
+            _latitude.append(0x00)
+        }
+        for _ in _longitude.count..<10{
+            _longitude.append(0x00)
+        }
+        
+        let lockIddata = lockId.data(using: String.Encoding.utf8)
+        let message=Array(_longitude)+Array(_latitude)+Array(lockIddata!)+_userName
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x03,0x62,0xff]+message
         
         var crc=m.crc16()
@@ -139,10 +148,21 @@ class Socket: NSObject {
                 let response=rdata[20]
                 if response == 1{
                     //faild
-                    Toast.show(message: "请求失败！", controller: controller)
-                }else {
-                    Toast.show(message: "远程开锁成功！", controller: controller)
+                    Toast.show(message: "收到指令！", controller: controller)
                     
+                    guard let tdata = client.read(1024*10,timeout: 30) else { return }
+                    if tdata[0] == 0x7e
+                    {
+                        
+                        let response=tdata[20]
+                        if response == 0{
+                            Toast.show(message: "远程开锁成功！", controller: controller)
+                        }else{
+                            Toast.show(message: "远程开锁失败！", controller: controller)
+                        }
+                    }
+                } else{
+                    Toast.show(message: "请求失败！", controller: controller)
                 }
                 
                 

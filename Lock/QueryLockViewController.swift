@@ -132,7 +132,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
             message = Array(str.utf8)
         }
         
-        for _ in 1...50{
+        for _ in message.count..<50{
             message.append(0x00)
         }
         var type:[UInt8]=[]
@@ -175,6 +175,7 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                         i+=1
                         //client.send(data:data )
                     }else{
+                        rdata+=r
                         break
                     }
                 }
@@ -194,31 +195,30 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                         print(response.count)
                         
                         let size=response[0]
-                        var locks=(rdata[21...rdata.count-3])
+                        var locks=(rdata[21...rdata.count-1])
                         var ind=locks.firstIndex(of:0x7E)
-                        //for i in 0...22{
-                        var rang=ind!-2...ind!+20
-                        locks.removeSubrange(rang)
-                        //}
-                        ind=locks.firstIndex(of:0x7E)
-                        rang=ind!-2...ind!+20
-                        locks.removeSubrange(rang)
-                        ind=locks.firstIndex(of:0x7E)
-                        rang=ind!-2...ind!+20
-                        locks.removeSubrange(rang)
-//                        for i in 0...22{
-//                            locks.remove(at: ind!-2)
-//                        }
-//                        ind=locks.firstIndex(of:0x7E)
-//                        for i in 0...22{
-//                            locks.remove(at: ind!-2)
-//                        }
+
+                        if ind == nil || ind! >= locks.count{
+                            
+                        }else{
+                            var rang=ind!-2...ind!+20
+                            locks.removeSubrange(rang)
+                            ind=locks.firstIndex(of:0x7E)
+                            rang=ind!-2...ind!+20
+                            locks.removeSubrange(rang)
+                            ind=locks.firstIndex(of:0x7E)
+                            rang=ind!-2...ind!+20
+                            locks.removeSubrange(rang)
+                        }
+                        
+
+                        
                         LockArray.removeAll()
                         //let count:Int=Int((size+1)*70+1)
                        // if  count==response.count{
                         var s:Int=0+21
                         var e:Int=9+21
-                        for i in 0..<size-1{
+                        for i in 0..<size{
                                 var loc:Lock!=Lock()
                                 //s=Int(i*70)
                                 e=s+9//Int(9+i*70)

@@ -20,6 +20,7 @@ let client = TCPClient(address:
 var gUserName=""
 var gDateFormat="yyyy-MM-dd HH:mm:ss"
 var offLine=false
+var gDirect=false
 class ViewController: UIViewController {
 
     @IBOutlet weak var eyeButton: UIButton!
@@ -101,7 +102,7 @@ class ViewController: UIViewController {
         
         
         
-        switch client.connect(timeout: 20) {
+        switch client.connect(timeout: 35) {
         case .success:
             switch client.send(data:data ) {
             case .success:
@@ -112,7 +113,10 @@ class ViewController: UIViewController {
                     let response=Array(rdata[20...rdata.count-1])
                     if response[0] == 0x00{
                         //faild
+                        
                         loadFaild("用户名或密码错误")
+                        
+                        performSegue(withIdentifier: "direct", sender: nil)
                     }else if response[0] == 0x03 ||  response[0] == 0x04{
                         loadSuccess()
                         if response.count > 4{
@@ -164,6 +168,17 @@ class ViewController: UIViewController {
             }
             print("connect faild")
             break
+        }
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "direct"
+        {
+            //if let destinationVC = segue.destination as? ManageTableViewController {
+            //    destinationVC.disable = true
+            //}
+            gDirect=true
         }
         
     }
