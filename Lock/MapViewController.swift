@@ -80,8 +80,13 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         let tag=sender.tag
         if LocationArray.count > tag{
             let l=LocationArray[tag]
+            //check auth
+            if Log.getLock(lock: l.id, UserIDs: gUserName){
+                Socket.openLock(longitude:l.longitude,latitude:l.latutude,lockId:l.id,controller:self)
+            }else{
+                Toast.show(message: "没有权限！", controller: self)
+            }
             
-            Socket.openLock(longitude:l.longitude,latutude:l.latutude,lockId:l.id,controller:self)
         }
     }
     // 根据anntation生成对应的View
@@ -207,8 +212,15 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         for _ in _longitude.count..<10{
             _longitude.append(0x00)
         }
-        let rang="0.0100"
-        message=_longitude+_latitude+Array(rang.utf8)
+        let search=Log.servers()
+        let port=Int32(search.Search_Scope)//0~4
+        
+        let rang=String(pow(Double(10),Double(port!))*Double(0.0001))
+        var _rang=Array(rang.utf8)
+        for _ in _rang.count..<6{
+            _rang.append(0x00)
+        }
+        message=_longitude+_latitude+_rang
         let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x06,0x62,0xff]+message
         
         var crc=m.crc16()

@@ -56,5 +56,9 @@
 	<string>Play with BLE Compatible devices</string>
 	<key>UIApplicationExitsOnSuspend</key>
 	<true/>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>baidumap</string>
+    </array>
 </dict>
 </plist>

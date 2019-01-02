@@ -11,7 +11,7 @@ import CryptoSwift
 import SwiftSocket
 import SwiftMessages
 import DLRadioButton
-class QueryLockViewController: UIViewController,UITableViewDelegate, UITableViewDataSource,UISearchResultsUpdating ,UISearchBarDelegate{
+class QueryLockViewController: UIViewController,UITableViewDelegate,CLLocationManagerDelegate, UITableViewDataSource,UISearchResultsUpdating ,UISearchBarDelegate{
     var location:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
     @IBOutlet weak var nameButton: DLRadioButton!
     
@@ -22,6 +22,10 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
     var LockArray:[Lock] = []
     
     var selected:Int=0
+    
+    let locationManager = CLLocationManager()
+    var currlocation:CLLocationCoordinate2D=CLLocationCoordinate2DMake(Double(31.2043183),Double(120.665441) );
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -44,6 +48,18 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
         nameButton.addTarget(self, action: #selector(QueryLockViewController.logSelectedButton), for: UIControlEvents.touchUpInside);
         codeButton.addTarget(self, action: #selector(QueryLockViewController.logSelectedButton), for: UIControlEvents.touchUpInside);
         queryAll(str: "")
+        
+        // Ask for Authorisation from the User.
+        self.locationManager.requestAlwaysAuthorization()
+        
+        // For use in foreground
+        self.locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
     }
 
     @objc @IBAction private func logSelectedButton(radioButton : DLRadioButton) {
@@ -94,12 +110,32 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
         let alert = UIAlertController(title: "", message: "导航到锁设备位置？", preferredStyle: UIAlertControllerStyle.alert)
         let OKAction = UIAlertAction(title: "导航", style: .default) { (action:UIAlertAction!) in
             
-            if self.LockArray.count > indexPath.row{
-                let lock:Lock=self.LockArray[indexPath.row]
-                self.location.latitude=Double(lock.latutude)!
-                self.location.longitude=Double(lock.longitude)!
-                self.selected=indexPath.row
-                self.performSegue(withIdentifier: "location", sender: nil)
+//            if self.LockArray.count > indexPath.row{
+//                let lock:Lock=self.LockArray[indexPath.row]
+//                self.location.latitude=Double(lock.latutude)!
+//                self.location.longitude=Double(lock.longitude)!
+//                self.selected=indexPath.row
+//                self.performSegue(withIdentifier: "location", sender: nil)
+//            }
+            
+            
+            // 国测局坐标类型的原始坐标
+            let gcj02Coord:CLLocationCoordinate2D  = CLLocationCoordinate2DMake(self.currlocation.latitude, self.currlocation.longitude)
+            // 转为百度经纬度类型的坐标
+            let bd09Coord:CLLocationCoordinate2D  = BMKCoordTrans(gcj02Coord, BMK_COORD_TYPE(rawValue: 0)!, BMK_COORD_TYPE(rawValue: 2)!)
+            
+            
+            let l:Lock=self.LockArray[indexPath.row]
+            if (UIApplication.shared.canOpenURL(URL(string:"baidumap://map/")!)) {
+                
+                let urlString=String(format:"baidumap://map/direction?origin=%f,%f&destination=%f,%f&mode=driving",
+                                     bd09Coord.latitude,
+                                     bd09Coord.longitude,
+                                     Float(l.latutude)!,
+                                     Float(l.longitude)!)
+                UIApplication.shared.openURL(URL(string:urlString)!)
+            }else{
+                Toast.show(message: "请安装百度地图", controller: self)
             }
             
         }
@@ -280,5 +316,18 @@ class QueryLockViewController: UIViewController,UITableViewDelegate, UITableView
                 destinationVC.name=lock.name
             }
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        if (abs(currlocation.latitude-locValue.latitude)>0.01 || abs(currlocation.longitude-locValue.longitude)>0.01){
+            currlocation.latitude=locValue.latitude
+            currlocation.longitude=locValue.longitude
+            
+            
+        }
+        
+        
     }
 }

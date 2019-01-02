@@ -21,8 +21,8 @@ class NetSettingViewController: UIViewController {
         // Do any additional setup after loading the view.
         OKButton.layer.cornerRadius=5
         CancelButton.layer.cornerRadius=5
-        slider.minimumValue=1
-        slider.maximumValue=10
+        slider.minimumValue=0
+        slider.maximumValue=3
         self.title="网络配置"
         let server=Log.servers()
         adress.text=server.NMSAdrres
@@ -59,6 +59,6 @@ class NetSettingViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        Log.server(adress.text!, port.text!, String(scope))
+        Log.server(adress.text!, port.text!, scope)
     }
 }

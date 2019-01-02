@@ -153,7 +153,21 @@ class Log: NSObject {
         }
         return logArray
     }
-    class func lock(locks:String){
+    class func getLock(lock:String,UserIDs:String)->Bool{
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
+        
+        let ops = Table("lock")
+        let UserID = Expression<String?>("UserID")
+        let Locker_ID = Expression<String?>("Locker_ID")
+        let count = try? db!.scalar(ops.filter(UserID==UserIDs&&Locker_ID==lock).count)
+        if count! > 0{
+            return true
+        }
+        return false
+    }
+    class func lock(locks:String,UserIDs:String){
         if locks.count == 0{
             return
         }
@@ -166,7 +180,7 @@ class Log: NSObject {
         let Locker_ID = Expression<String?>("Locker_ID")
         let lockers=locks.components(separatedBy: ",")
         for lock in lockers{
-            try? db?.run(ops.insert(or: .replace, UserID <- "alice@mac.com", Locker_ID <- lock))
+            try? db?.run(ops.insert(or: .replace, UserID <- UserIDs, Locker_ID <- lock))
         }
     }
     class func User(user:User){
@@ -215,7 +229,7 @@ class Log: NSObject {
         
         return ""
     }
-    class func server(_ adress:String,_ port:String,_ scope:String){
+    class func server(_ adress:String,_ port:String,_ scope:Int){
         let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
         print(dbPath)
         let db = try? Connection(dbPath)
@@ -223,7 +237,7 @@ class Log: NSObject {
         let ops = Table("setting")
         let NMSAdrres = Expression<String?>("NMSAdrres")
         let NMSPort = Expression<String?>("NMSPort")
-        let Search_Scope = Expression<String>("Search_Scope")
+        let Search_Scope = Expression<Int>("Search_Scope")
         try? db?.run(ops.insert(or: .replace, NMSAdrres <- adress, NMSPort <- port,Search_Scope <- scope))
 
     }

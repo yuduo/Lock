@@ -15,6 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate ,BMKGeneralDelegate{
     var window: UIWindow?
     var _mapManager: BMKMapManager?
 
+    func onGetPermissionState(_ iError: Int32) {
+        //
+    }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         Utility.copyFile(fileName: "db.sqlite")

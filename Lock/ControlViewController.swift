@@ -374,7 +374,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         // Action triggered on selection
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.drop.setTitle(item, for: .normal)
-            Socket.openLock(longitude: String(format:"%f",(self?.bd09Coord.longitude)!),latutude: String(format:"%f",(self?.bd09Coord.latitude)!),lockId: (self?.LocationArray[index].id)!,controller:self!)
+            Socket.openLock(longitude: String(format:"%f",(self?.bd09Coord.longitude)!),latitude: String(format:"%f",(self?.bd09Coord.latitude)!),lockId: (self?.LocationArray[index].id)!,controller:self!)
         }
     }
     
@@ -493,7 +493,10 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 if dropDown.dataSource.count > 0{
                     self.drop.setTitle(dropDown.dataSource[0], for: .normal)
                 }
-                
+                dropDown.selectionAction = { [weak self] (index, item) in
+                    self?.drop.setTitle(item, for: .normal)
+                    
+                }
             }else{
                 loadFaild("查询失败")
             }

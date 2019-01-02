@@ -117,13 +117,13 @@ class ViewController: UIViewController {
                         loadFaild("用户名或密码错误")
                         
                         performSegue(withIdentifier: "direct", sender: nil)
-                    }else if response[0] == 0x03 ||  response[0] == 0x04{
+                    }else {
                         loadSuccess()
                         if response.count > 4{
                             let _time=response[4...11]
                             let lock=String(data: Data(bytes:response[12...response.count-3]), encoding: String.Encoding.utf8)
                             if lock != nil {
-                                Log.lock(locks: lock!)
+                                Log.lock(locks: lock!,UserIDs:u)
                             }
                             
                             var user=User()
@@ -142,10 +142,7 @@ class ViewController: UIViewController {
                         Log.login(u, "正常登录")
                         Socket.uploadLog(content: "登录", target: u)
                         performSegue(withIdentifier: "loginSegue", sender: nil)
-                    }else {
-                        
                     }
-                    
                     
                 }
                 
