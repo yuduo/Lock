@@ -294,10 +294,53 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
             annotation.subtitle=location.id
             
             _mapView?.addAnnotation(annotation)
+            
         }
         
+        // 轨迹点
+        var tempPoints = Array(repeating: CLLocationCoordinate2D(latitude: 0, longitude: 0), count: LocationArray.count)
+        var i=0
+        for j in 0..<LocationArray.count {
+            let l=LocationArray[i];
+            tempPoints[i].longitude = Double(l.longitude)!
+            tempPoints[i].latitude = Double(l.latutude)!
+            i+=1
+        }
+        let polyLine = BMKPolyline(coordinates:&tempPoints, count:UInt(LocationArray.count))
+        mapViewFitPolyLine(polyline: polyLine)
     }
-    
+    //根据polyline设置地图范围
+    func mapViewFitPolyLine(polyline: BMKPolyline!) {
+        if polyline.pointCount < 1 {
+            return
+        }
+        
+        let pt = polyline.points[0]
+        var ltX = pt.x
+        var rbX = pt.x
+        var ltY = pt.y
+        var rbY = pt.y
+        
+        for i in 1..<polyline.pointCount {
+            let pt = polyline.points[Int(i)]
+            if pt.x < ltX {
+                ltX = pt.x
+            }
+            if pt.x > rbX {
+                rbX = pt.x
+            }
+            if pt.y > ltY {
+                ltY = pt.y
+            }
+            if pt.y < rbY {
+                rbY = pt.y
+            }
+        }
+        
+        let rect = BMKMapRectMake(ltX, ltY, rbX - ltX, rbY - ltY)
+        _mapView!.visibleMapRect = rect
+        _mapView!.zoomLevel = _mapView!.zoomLevel - 0.3
+    }
     private func translate(_ longitude:Double,_ latitude:Double){
         //var url=String(format: "http://api.map.baidu.com/ag/coord/convert?from=0&to=2&x=%f&y=%f",longitude,latitude)
         

@@ -34,7 +34,7 @@ class MainViewController: UIViewController {
     
     private func check(){
         
-        let url = URL(string:"http://47.99.47.199:8080/iODS_Lock/AndroidApp/ver.json")//URL(string: String(format: "http://%s:%s/iODS_Lock/AndroidApp/ver.json","server.NMSAdrres","server.NMSPort"))
+        let url = URL(string:"http://47.99.47.199:8080/iODS_Lock/iOSApp/ver.json")//URL(string: String(format: "http://%s:%s/iODS_Lock/AndroidApp/ver.json","server.NMSAdrres","server.NMSPort"))
         var request = URLRequest(url: url!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "GET"
