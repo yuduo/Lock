@@ -448,7 +448,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
             sleep(1)
             guard let rdata = client.read(1024*10) else { return }
             let cdata = Array(rdata[20...21])
-            let count:Int16=Int16((UInt8(cdata[1]) << 8) + UInt8(cdata[0]))
+            var count:Int16=Int16((UInt8(cdata[1]) << 8) + UInt8(cdata[0]))
             if rdata[0] == 0x7e
             {
                 
@@ -459,6 +459,9 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 loadSuccess()
                 LocationArray.removeAll()
                 let loc=Array(response[2...response.count-2])
+                if count>12{
+                    count=12
+                }
                 for i in 0..<count{
                     var location:Location!=Location()
                     var s:Int=Int(0+i*88)

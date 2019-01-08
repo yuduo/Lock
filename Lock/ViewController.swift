@@ -13,6 +13,8 @@ import SwiftMessages
 
 let server=Log.servers()
 
+
+
 let client = TCPClient(address:
     server.NMSAdrres,
                        

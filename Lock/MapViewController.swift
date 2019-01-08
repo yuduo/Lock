@@ -194,7 +194,21 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
             self.queryLock(latitude:String(bd09Coord.latitude) ,longitude:String(bd09Coord.longitude))
         }
     }
-    
+    private func sendLockNext(byte:UInt8)->Data{
+        let message:[UInt8]=[byte]
+        let m:[UInt8]=[0x00,0x10, 0x01,0x00,0x01,0x00,0x06,0x62,0x6c]+message
+        
+        var crc=m.crc16()
+        
+        let bytePtr = withUnsafePointer(to: &crc) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                UnsafeBufferPointer(start: $0, count: 2)
+            }
+        }
+        let byteArray = Array(bytePtr)
+        let data = Data(bytes: [0x7e, 0x00,0x10, 0x01,0x00,0x01,0x00,0x06,0x62,0x6c]+message+byteArray+[0x7e])
+        return data
+    }
     private func queryLock(latitude:String,longitude:String){
         var message:[UInt8]=[]
         var _latitude:[UInt8]=Array(latitude.utf8)
@@ -238,19 +252,44 @@ class MapViewController: UIViewController ,BMKMapViewDelegate,CLLocationManagerD
         switch client.send(data:data ) {
         case .success:
             sleep(1)
-            guard let rdata = client.read(1024*10) else { return }
+            
+            var rdata:[Byte]=[]
+            var i:Int=0
+            while true{
+                guard let r = client.read(1024*10) else { break }
+                if (r[3] != r[5]){
+                    print(r[3])
+                    print(r[5])
+                    if i == 0 {
+                        rdata+=r[0...r.count-4]
+                    }else{
+                        rdata+=r[20...r.count-4]
+                    }
+                    i+=1
+                    //client.send(data:data )
+                    sendLockNext(byte:0x00)
+                    sleep(1)
+                }else{
+                    rdata+=r
+                    break
+                }
+            }
+            
             let cdata = Array(rdata[20...21])
-            let count:Int16=Int16((UInt16(cdata[1]) << 8) + UInt16(cdata[0]))
+            var count:Int16=Int16((UInt16(cdata[1]) << 8) + UInt16(cdata[0]))
             if rdata[0] == 0x7e
             {
                 
-                let response=Array(rdata[20...rdata.count-3])
+                    let response=Array(rdata[20...rdata.count-3])
                 
                     loadSuccess()
                     if response.count < 4{
                         return
                     }
                     let loc=Array(response[2...response.count-2])
+                    if count > 12{
+                        count=12
+                    }
                     for i in 0..<count{
                         var location:Location!=Location()
                         let lon=loc[Int(0+i*88)...Int(9+i*88)]
