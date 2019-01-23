@@ -136,11 +136,16 @@ class Socket: NSObject {
         let data = Data(bytes: [0x7e, 0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x62,0xff]+message+byteArray+[0x7e])
         
         
+        let sv = UIViewController.displaySpinner(onView: controller.view)
         
         switch client.send(data:data ) {
         case .success:
             sleep(1)
-            guard let rdata = client.read(1024*10) else { return }
+            guard let rdata = client.read(1024*10) else {
+                UIViewController.removeSpinner(spinner: sv)
+                return
+                
+            }
             
             if rdata[0] == 0x7e
             {
@@ -150,7 +155,11 @@ class Socket: NSObject {
                     //faild
                     Toast.show(message: "收到指令！", controller: controller)
                     
-                    guard let tdata = client.read(1024*10,timeout: 30) else { return }
+                    guard let tdata = client.read(1024*10,timeout: 10) else {
+                        UIViewController.removeSpinner(spinner: sv)
+                        return
+                        
+                    }
                     if tdata[0] == 0x7e
                     {
                         
@@ -161,14 +170,17 @@ class Socket: NSObject {
                             Toast.show(message: "远程开锁失败！", controller: controller)
                         }
                     }
+                    UIViewController.removeSpinner(spinner: sv)
                 } else{
                     Toast.show(message: "请求失败！", controller: controller)
+                    UIViewController.removeSpinner(spinner: sv)
                 }
                 
                 
             }
             
         case .failure(let error):
+            UIViewController.removeSpinner(spinner: sv)
             print(error)
         }
     }

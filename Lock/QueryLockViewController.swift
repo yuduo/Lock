@@ -71,7 +71,9 @@ class QueryLockViewController: UIViewController,UITableViewDelegate,CLLocationMa
         //queryAll(str: searchText)
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
         queryAll(str: searchBar.text!)
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

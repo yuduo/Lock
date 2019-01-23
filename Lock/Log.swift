@@ -112,6 +112,10 @@ class Log: NSObject {
         let startDate=dateFormatter.date(from: start)
         let endDate=dateFormatter.date(from: end)
 
+        if(startDate?.compare(endDate!)==ComparisonResult.orderedDescending)
+        {
+            return logArray
+        }
         let query=ops.filter(startDate!.toLocalTime()...endDate!.toLocalTime() ~= Date_Time)
         for ope in (try! db?.prepare(query))! {
             if ope[Operation_Record].isEmpty{
@@ -178,7 +182,9 @@ class Log: NSObject {
         let ops = Table("lock")
         let UserID = Expression<String?>("UserID")
         let Locker_ID = Expression<String?>("Locker_ID")
-        let lockers=locks.components(separatedBy: ",")
+        var ls = locks.replacingOccurrences(of: "\u{f}", with: "", options: NSString.CompareOptions.literal, range: nil)
+        ls = ls.replacingOccurrences(of: "\\", with: "", options: NSString.CompareOptions.literal, range: nil)
+        let lockers=ls.components(separatedBy: "\r")
         for lock in lockers{
             try? db?.run(ops.insert(or: .replace, UserID <- UserIDs, Locker_ID <- lock))
         }
@@ -196,6 +202,18 @@ class Log: NSObject {
         let Last_Tag = Expression<Int?>("Last_Tag")
         //try? db?.run(ops.insert(or: .replace, UserID <- user.UserID, UserType <- user.UserType, UserPassWd <- user.UserPassWd,Flash_Date <- user.Flash_Date,Last_Tag <- user.Last_Tag))
         try? db?.run(ops.insert(UserID <- user.UserID, UserType <- user.UserType, UserPassWd <- user.UserPassWd,Flash_Date <- user.Flash_Date,Last_Tag <- user.Last_Tag))
+    }
+    class func DeleteUser(_ username:String)
+    {
+        let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path
+        print(dbPath)
+        let db = try? Connection(dbPath)
+        
+        let ops = Table("user")
+        let UserID = Expression<String?>("UserID")
+        
+        let query=ops.filter(UserID==username)
+        try? db?.run(query.delete())
     }
     class func User(username:String,password:String)->Bool{
         let dbPath: String = Utility.getDocumentsDirectory().appendingPathComponent("db.sqlite").path

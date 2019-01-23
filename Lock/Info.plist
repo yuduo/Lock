@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>5</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>baidumap</string>
@@ -32,9 +32,9 @@
 		<true/>
 	</dict>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Play with BLE Compatible devices</string>
+	<string>APP需要蓝牙权限来开启锁具</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs your current location</string>
+	<string>APP需要用到你当前的位置来获取附近的锁具</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<true/>
 	<key>UIApplicationExitsOnSuspend</key>
@@ -60,5 +60,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UILaunchImageFile~iphone</key>
+	<string>Default</string>
 </dict>
 </plist>

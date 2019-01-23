@@ -61,7 +61,7 @@ class HelpViewController: UIViewController ,UITableViewDelegate, UITableViewData
 //            performSegue(withIdentifier: "feedback", sender: nil)
 //        case 2:
             //
-            let url=URL(string: "https://itunes.apple.com/id382165332")
+            let url=URL(string: "https://itunes.apple.com/id1448235015")
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url!, options: [:], completionHandler: nil)
             } else {

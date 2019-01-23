@@ -10,8 +10,10 @@ import UIKit
 
 class MainViewController: UIViewController {
 
+    @IBOutlet weak var quiteButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
+        quiteButton.layer.cornerRadius=5
         check()
         // Do any additional setup after loading the view.
     }
@@ -81,5 +83,8 @@ class MainViewController: UIViewController {
             
         }
         task.resume()
+    }
+    @IBAction func exitClicked(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil);
     }
 }

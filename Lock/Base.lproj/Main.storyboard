@@ -231,15 +231,38 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BJM-Ba-U9a">
+                                <rect key="frame" x="66" y="582" width="242" height="34"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="P8D-gI-Vf7"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="242" id="Uob-2w-GKE"/>
+                                    <constraint firstAttribute="width" constant="242" id="tAL-Ct-74t"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="退出登录">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="exitClicked:" destination="ni8-Jc-Jxc" eventType="touchUpInside" id="WXg-cS-5Q8"/>
+                                    <action selector="quitButtonClicked:" destination="HcS-kb-YsQ" eventType="touchUpInside" id="P9v-kL-LPK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="BJM-Ba-U9a" firstAttribute="leading" secondItem="2NN-I3-p3q" secondAttribute="leading" constant="66" id="90k-32-bUN"/>
                             <constraint firstItem="xGc-qV-DSm" firstAttribute="centerX" secondItem="IdH-kk-fFf" secondAttribute="centerX" id="NUA-uD-zZH"/>
+                            <constraint firstItem="2NN-I3-p3q" firstAttribute="bottom" secondItem="BJM-Ba-U9a" secondAttribute="bottom" constant="51" id="U7e-8d-Ipa"/>
+                            <constraint firstItem="2NN-I3-p3q" firstAttribute="trailing" secondItem="BJM-Ba-U9a" secondAttribute="trailing" constant="67" id="b0v-BB-IuU"/>
                             <constraint firstItem="xGc-qV-DSm" firstAttribute="top" secondItem="2NN-I3-p3q" secondAttribute="top" constant="36" id="gWi-Gk-XJw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2NN-I3-p3q"/>
                     </view>
                     <navigationItem key="navigationItem" title="亨通门禁" id="HRi-eP-VWz"/>
+                    <connections>
+                        <outlet property="quiteButton" destination="BJM-Ba-U9a" id="6Xe-Sp-sbW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bBz-Os-ob3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1304,7 +1327,7 @@
     </scenes>
     <resources>
         <image name="下拉" width="48" height="48"/>
-        <image name="亨通logo" width="682" height="465"/>
+        <image name="亨通logo" width="511.5" height="348.75"/>
         <image name="地图方式" width="355" height="355"/>
         <image name="工单管理" width="552" height="469"/>
         <image name="求助开锁" width="355" height="355"/>
@@ -1321,6 +1344,6 @@
         <image name="闭眼" width="64" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gby-lr-GsD"/>
+        <segue reference="sQb-5g-4ge"/>
     </inferredMetricsTieBreakers>
 </document>

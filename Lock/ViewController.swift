@@ -123,7 +123,7 @@ class ViewController: UIViewController {
                         loadSuccess()
                         if response.count > 4{
                             let _time=response[4...11]
-                            let lock=String(data: Data(bytes:response[12...response.count-3]), encoding: String.Encoding.utf8)
+                            let lock=String(data: Data(bytes:response[12...response.count-4]), encoding: String.Encoding.utf8)
                             if lock != nil {
                                 Log.lock(locks: lock!,UserIDs:u)
                             }

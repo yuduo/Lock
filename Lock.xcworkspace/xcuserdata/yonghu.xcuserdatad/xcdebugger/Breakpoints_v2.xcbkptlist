@@ -9,14 +9,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/SwiftSocket/Sources/ytcpsocket.c"
-            timestampString = "568605909.401619"
+            filePath = "Lock/Socket.swift"
+            timestampString = "569906591.054003"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "ytcpsocket_connect"
-            landmarkType = "9">
+            startingLineNumber = "184"
+            endingLineNumber = "184"
+            landmarkName = "openLock(lockId:controller:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

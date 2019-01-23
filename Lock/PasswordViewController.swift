@@ -86,6 +86,11 @@ class PasswordViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             return
         }
+        self.origin.resignFirstResponder()
+        self.phone.resignFirstResponder()
+        self.confirmP.resignFirstResponder()
+        self.newP.resignFirstResponder()
+        
         let username=gUserName
         let password=self.newP.text!
         var phone=self.phone.text!
@@ -136,22 +141,24 @@ class PasswordViewController: UIViewController {
                 let response=rdata[20]
                 if response == 0xFF{
                     //faild
-                    loadFaild("更新失败")
+                    
+                    Toast.show(message: "更新失败！", controller: self)
                 }else if response == 0x11{
                     let error = MessageView.viewFromNib(layout: .tabView)
                     error.configureTheme(.error)
-                    error.configureContent(title: "错误", body: "电话号码重复!")
+                    error.configureContent(title: "错误", body: "电话号码错误!")
                     
-                    
+                    Toast.show(message: "电话号码重复!", controller: self)
                 }else{
                     Toast.show(message: "修改成功！", controller: self)
+                    Log.DeleteUser(gUserName)
                 }
                 
                 
             }
             
         case .failure(let error):
-            loadFaild("发送失败")
+            Toast.show(message: "更新失败！", controller: self)
             print(error)
         }
     }

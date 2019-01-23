@@ -31,6 +31,7 @@
 		B69EC3A921788EB000692188 /* MessageBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3A821788EB000692188 /* MessageBox.swift */; };
 		B69EC3AB21796D1500692188 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3AA21796D1500692188 /* Socket.swift */; };
 		B69EC3AD2179B0C000692188 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69EC3AC2179B0C000692188 /* Log.swift */; };
+		B69F38BB21F806BA00F4A9CF /* ControllerEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69F38BA21F806BA00F4A9CF /* ControllerEx.swift */; };
 		B6AB0A0F217F14EC00136B2F /* ManageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB0A0E217F14EC00136B2F /* ManageTableViewController.swift */; };
 		B6AB0A12217F16BA00136B2F /* ManageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AB0A10217F16BA00136B2F /* ManageTableViewCell.swift */; };
 		B6AB0A13217F16BA00136B2F /* ManageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6AB0A11217F16BA00136B2F /* ManageTableViewCell.xib */; };
@@ -77,6 +78,7 @@
 		B69EC3A821788EB000692188 /* MessageBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBox.swift; sourceTree = "<group>"; };
 		B69EC3AA21796D1500692188 /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		B69EC3AC2179B0C000692188 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		B69F38BA21F806BA00F4A9CF /* ControllerEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerEx.swift; sourceTree = "<group>"; };
 		B6AB0A0E217F14EC00136B2F /* ManageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTableViewController.swift; sourceTree = "<group>"; };
 		B6AB0A10217F16BA00136B2F /* ManageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTableViewCell.swift; sourceTree = "<group>"; };
 		B6AB0A11217F16BA00136B2F /* ManageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ManageTableViewCell.xib; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				B69EC39221707CB800692188 /* LogQueryViewController.swift */,
 				B69EC3AC2179B0C000692188 /* Log.swift */,
 				B6CA61C421B1079400740C84 /* DateEx.swift */,
+				B69F38BA21F806BA00F4A9CF /* ControllerEx.swift */,
 				B69EC39721708BFC00692188 /* Utility.swift */,
 				B69EC3AA21796D1500692188 /* Socket.swift */,
 				B6CA61C221AF900700740C84 /* StringEx.swift */,
@@ -367,6 +370,7 @@
 				B6AB0A17217F1BE500136B2F /* ClearViewController.swift in Sources */,
 				B69EC3AB21796D1500692188 /* Socket.swift in Sources */,
 				B6E3AF7321951C3800FEC68E /* Toast.swift in Sources */,
+				B69F38BB21F806BA00F4A9CF /* ControllerEx.swift in Sources */,
 				B6AB0A0F217F14EC00136B2F /* ManageTableViewController.swift in Sources */,
 				B69EC39F217495A000692188 /* QueryLockViewController.swift in Sources */,
 				B69EC3A121758F4A00692188 /* Lock.swift in Sources */,

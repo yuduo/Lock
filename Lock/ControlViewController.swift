@@ -387,7 +387,13 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
         // Action triggered on selection
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.drop.setTitle(item, for: .normal)
-            Socket.openLock(lockId: (self?.LocationArray[index].id)!,controller:self!)
+            
+            if(Log.getLock(lock: ((self?.LocationArray[index].id)!), UserIDs: gUserName)){
+                Socket.openLock(lockId: (self?.LocationArray[index].id)!,controller:self!)
+            }else{
+                Toast.show(message: "没有权限！", controller: self!)
+            }
+            
         }
     }
     
@@ -480,7 +486,10 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                     let warning=loc[Int(87+i*88)]
                     location.longitude=String(data: Data(bytes:lon), encoding: String.Encoding.utf8)!
                     location.latutude=String(data: Data(bytes:lan), encoding: String.Encoding.utf8)!
-                    location.id=String(data: Data(bytes:id), encoding: String.Encoding.utf8)!
+                    var lid=String(data: Data(bytes:id), encoding: String.Encoding.utf8)!
+                    lid = lid.replacingOccurrences(of: "\r", with: "", options: NSString.CompareOptions.literal, range: nil)
+                    lid = lid.replacingOccurrences(of: "\u{f}", with: "", options: NSString.CompareOptions.literal, range: nil)
+                    location.id=lid
                     location.name=String(data: Data(bytes:name), encoding: String.Encoding.utf8)!
                     location.warning=Int(warning)
                     LocationArray.append(location)
