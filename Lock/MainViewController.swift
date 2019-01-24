@@ -68,7 +68,12 @@ class MainViewController: UIViewController {
                     
                     // Code in this block will trigger when OK button tapped.
                     print("Ok button tapped");
-                    
+                    let url=URL(string: "https://itunes.apple.com/cn/app/%E4%BA%A8%E9%80%9A%E9%97%A8%E7%A6%81/id1448235015?ls=1&mt=8")
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                    } else {
+                        UIApplication.shared.openURL(url!)
+                    }
                 }
                 alert.addAction(OKAction)
                 let cancelAction = UIAlertAction(title: "否", style: .default) { (action:UIAlertAction!) in

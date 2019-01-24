@@ -26,6 +26,7 @@ class PasswordViewController: UIViewController {
         OKButton.layer.cornerRadius=5
         CancelButton.layer.cornerRadius=5
         self.title="修改密码"
+        getPhone()
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,7 +44,51 @@ class PasswordViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    
+    func getPhone(){
+        var _userName:[UInt8]=Array(gUserName.utf8)
+        
+        for _ in _userName.count..<16{
+            _userName.append(0x00)
+        }
+        var crc1=_userName.crc16()
+        let bytePtr1 = withUnsafePointer(to: &crc1) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                UnsafeBufferPointer(start: $0, count: 2)
+            }
+        }
+        let byteArray1 = Array(bytePtr1)
+        
+        let m:[UInt8]=[0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0x62,0xff]+_userName+byteArray1
+        
+        var crc=m.crc16()
+        
+        let bytePtr = withUnsafePointer(to: &crc) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                UnsafeBufferPointer(start: $0, count: 2)
+            }
+        }
+        let byteArray = Array(bytePtr)
+        let data = Data(bytes: [0x7e, 0x00,0x10, 0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0x62,0xff]+_userName+byteArray1+byteArray+[0x7e])
+
+            switch client.send(data:data ) {
+            case .success:
+                sleep(1)
+                guard let rdata = client.read(1024*10) else { return }
+                if rdata[0] == 0x7e
+                {
+                    let response=Array(rdata[52...63])
+                    let phone=String(data: Data(bytes:rdata[52...63]), encoding: String.Encoding.utf8)
+                    DispatchQueue.main.async{
+                        self.phone.text=phone
+                    }
+                    
+                }
+            case .failure(let error):
+                print("send data faild")
+            }
+        
+        
+    }
     
 
     @IBAction func ConfirmButtonClicked(_ sender: Any) {
@@ -148,7 +193,7 @@ class PasswordViewController: UIViewController {
                     error.configureTheme(.error)
                     error.configureContent(title: "错误", body: "电话号码错误!")
                     
-                    Toast.show(message: "更新失败！", controller: self)
+                    Toast.show(message: "电话号码重复！", controller: self)
                 }else{
                     Toast.show(message: "修改成功！", controller: self)
                     Log.DeleteUser(gUserName)
