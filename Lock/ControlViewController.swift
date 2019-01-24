@@ -211,15 +211,20 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                 if ((response.count > 20)&&(response[response.count-1]==126)){
                     Toast.show(message: "请求开锁！", controller: self)
                     let m:[UInt8]=Array(response[10...26])
-                    var crc=m.crc16()
-                    let bytePtr = withUnsafePointer(to: &crc) {
-                        $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
-                            UnsafeBufferPointer(start: $0, count: 2)
+                    if(Log.getLock(lock: String(bytes:m,encoding:.utf8)!, UserIDs: gUserName)){
+                        var crc=m.crc16()
+                        let bytePtr = withUnsafePointer(to: &crc) {
+                            $0.withMemoryRebound(to: UInt8.self, capacity: 2) {
+                                UnsafeBufferPointer(start: $0, count: 2)
+                            }
                         }
+                        let byteArray = Array(bytePtr)
+                        _characteristic=characteristic
+                        sendOpenLock(message: byteArray, for:characteristic)
+                    }else{
+                        Toast.show(message: "没有权限！", controller: self)
                     }
-                    let byteArray = Array(bytePtr)
-                    _characteristic=characteristic
-                    sendOpenLock(message: byteArray, for:characteristic)
+                    
                     
                 }
             }
@@ -399,7 +404,7 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        //print("locations = \(locValue.latitude) \(locValue.longitude)")
         if ((abs(currentLocation.latitude-locValue.latitude)>0.01) || (abs(currentLocation.longitude-locValue.longitude)>0.01)){
             currentLocation.latitude=locValue.latitude
             currentLocation.longitude=locValue.longitude
@@ -486,10 +491,10 @@ class ControlViewController: UIViewController,CLLocationManagerDelegate ,CBCentr
                     let warning=loc[Int(87+i*88)]
                     location.longitude=String(data: Data(bytes:lon), encoding: String.Encoding.utf8)!
                     location.latutude=String(data: Data(bytes:lan), encoding: String.Encoding.utf8)!
-                    var lid=String(data: Data(bytes:id), encoding: String.Encoding.utf8)!
-                    lid = lid.replacingOccurrences(of: "\r", with: "", options: NSString.CompareOptions.literal, range: nil)
-                    lid = lid.replacingOccurrences(of: "\u{f}", with: "", options: NSString.CompareOptions.literal, range: nil)
-                    location.id=lid
+//                    var lid=String(data: Data(bytes:id), encoding: String.Encoding.utf8)!
+//                    lid = lid.replacingOccurrences(of: "\r", with: "", options: NSString.CompareOptions.literal, range: nil)
+//                    lid = lid.replacingOccurrences(of: "\u{f}", with: "", options: NSString.CompareOptions.literal, range: nil)
+                    location.id=String(data: Data(bytes:id), encoding: String.Encoding.utf8)!
                     location.name=String(data: Data(bytes:name), encoding: String.Encoding.utf8)!
                     location.warning=Int(warning)
                     LocationArray.append(location)

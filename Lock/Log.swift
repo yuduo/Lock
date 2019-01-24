@@ -165,7 +165,9 @@ class Log: NSObject {
         let ops = Table("lock")
         let UserID = Expression<String?>("UserID")
         let Locker_ID = Expression<String?>("Locker_ID")
-        let count = try? db!.scalar(ops.filter(UserID==UserIDs&&Locker_ID==lock).count)
+        var ls = lock.replacingOccurrences(of: "\u{f}", with: "", options: NSString.CompareOptions.literal, range: nil)
+        ls = ls.replacingOccurrences(of: "\r", with: "", options: NSString.CompareOptions.literal, range: nil)
+        let count = try? db!.scalar(ops.filter(UserID==UserIDs&&Locker_ID==ls).count)
         if count! > 0{
             return true
         }
@@ -183,8 +185,12 @@ class Log: NSObject {
         let UserID = Expression<String?>("UserID")
         let Locker_ID = Expression<String?>("Locker_ID")
         var ls = locks.replacingOccurrences(of: "\u{f}", with: "", options: NSString.CompareOptions.literal, range: nil)
+        ls = ls.replacingOccurrences(of: "\u{0f}", with: "", options: NSString.CompareOptions.literal, range: nil)
+        ls = ls.replacingOccurrences(of: "\u{0F}", with: "", options: NSString.CompareOptions.literal, range: nil)
         ls = ls.replacingOccurrences(of: "\\", with: "", options: NSString.CompareOptions.literal, range: nil)
+        
         let lockers=ls.components(separatedBy: "\r")
+        try? db?.run(ops.delete())
         for lock in lockers{
             try? db?.run(ops.insert(or: .replace, UserID <- UserIDs, Locker_ID <- lock))
         }

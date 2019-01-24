@@ -826,25 +826,28 @@
             </objects>
             <point key="canvasLocation" x="5092" y="-1075.4122938530736"/>
         </scene>
-        <!--View Controller-->
+        <!--Version Controller-->
         <scene sceneID="HYj-p7-wFF">
             <objects>
-                <viewController id="2nl-Bc-h3H" sceneMemberID="viewController">
+                <viewController id="2nl-Bc-h3H" customClass="VersionController" customModule="Lock" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sia-Ae-iGj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="当前版本主要更新内容" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="COk-mj-Nc4">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="当前版本主要更新内容" translatesAutoresizingMaskIntoConstraints="NO" id="COk-mj-Nc4">
                                 <rect key="frame" x="0.0" y="64" width="375" height="601"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="iuy-KZ-1lb"/>
                     </view>
+                    <connections>
+                        <outlet property="viewtext" destination="COk-mj-Nc4" id="wIf-Uf-R7r"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c5g-Qb-53o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1327,7 +1330,7 @@
     </scenes>
     <resources>
         <image name="下拉" width="48" height="48"/>
-        <image name="亨通logo" width="511.5" height="348.75"/>
+        <image name="亨通logo" width="682" height="465"/>
         <image name="地图方式" width="355" height="355"/>
         <image name="工单管理" width="552" height="469"/>
         <image name="求助开锁" width="355" height="355"/>

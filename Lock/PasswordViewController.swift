@@ -148,7 +148,7 @@ class PasswordViewController: UIViewController {
                     error.configureTheme(.error)
                     error.configureContent(title: "错误", body: "电话号码错误!")
                     
-                    Toast.show(message: "电话号码重复!", controller: self)
+                    Toast.show(message: "更新失败！", controller: self)
                 }else{
                     Toast.show(message: "修改成功！", controller: self)
                     Log.DeleteUser(gUserName)
